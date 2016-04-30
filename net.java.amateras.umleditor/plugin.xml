@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+   <extension-point id="dnd" name="DragAndDrop" schema="schema/dnd.exsd"/>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+      		id = "net.java.amateras.uml.classdiagram.ClassDiagramEditor"
+            class="net.java.amateras.uml.classdiagram.ClassDiagramEditor"
+            default="true"
+            contributorClass="net.java.amateras.uml.UMLActionBarContributor"
+            extensions="cld"
+            icon="icons/class_diagram.gif"
+            name="%plugin.class.editor"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="net.java.amateras.umleditor.category"
+            name="%plugin.category"
+            />
+      <wizard
+            category="net.java.amateras.umleditor.category"
+            class="net.java.amateras.uml.classdiagram.wizard.NewClassDiagramWizard"
+            icon="icons/class_diagram.gif"
+            id="net.java.amateras.umleditor.wizard1"
+            name="%plugin.wizard.newClassDiagram"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="net.java.amateras.uml.UMLPreferencePage"
+            id="net.java.amateras.uml.UMLPreferencePage"
+            name="AmaterasUML"/>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer class="net.java.amateras.uml.UMLPreferenceInitializer"/>
+   </extension>
+</plugin>

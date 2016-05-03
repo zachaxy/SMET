@@ -28,7 +28,7 @@ public class ClassModel extends CommonEntityModel {
 	 * Default constructor
 	 */
 	public ClassModel() {
-		setName("Class" + number);
+		setName("State" + number);
 		number++;
 		int newLength = propertyDescriptors.length + 1;
 

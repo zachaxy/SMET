@@ -18,6 +18,15 @@ public class AttributeModel extends AbstractUMLModel implements Cloneable {
 	private Visibility visibility = Visibility.PRIVATE;
 	private String name = "";
 	private String type = "int";
+	private String cons;
+	public String getCons() {
+		return cons;
+	}
+
+	public void setCons(String cons) {
+		this.cons = cons;
+	}
+
 	private boolean isStatic;
 	
 	public static final String P_VISIBILITY = "_visibility";
@@ -73,8 +82,8 @@ public class AttributeModel extends AbstractUMLModel implements Cloneable {
 				new EnumPropertyDescriptor(P_VISIBILITY,
 						UMLPlugin.getDefault().getResourceString("property.visibility"),
 						Visibility.getVisibilities()),
-				new BooleanPropertyDescriptor(P_STATIC,
-						UMLPlugin.getDefault().getResourceString("property.static"))
+				new BooleanPropertyDescriptor(P_STATIC,"constraint"
+						/*UMLPlugin.getDefault().getResourceString("property.static")*/)
 		};
 	}
 

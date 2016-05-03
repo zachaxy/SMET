@@ -36,7 +36,7 @@ public class ClassModel extends CommonEntityModel {
 		System.arraycopy(propertyDescriptors, 0, newPropertyDescriptors, 0, propertyDescriptors.length);
 
 		newPropertyDescriptors[newLength - 1] =
-			new BooleanPropertyDescriptor(P_ABSTRACT, UMLPlugin.getDefault().getResourceString("property.abstract"));
+			new BooleanPropertyDescriptor(P_ABSTRACT, "StateType"/*UMLPlugin.getDefault().getResourceString("property.abstract")*/);
 
 		propertyDescriptors = newPropertyDescriptors;
 	}
@@ -61,7 +61,11 @@ public class ClassModel extends CommonEntityModel {
 
 	public Object getPropertyValue(Object id) {
 		if (id.equals(P_ABSTRACT)) {
-			return new Boolean(isAbstract());
+			if(isAbstract)
+				return "初始状态";
+			else
+				return "非初始状态";
+			//return new Boolean(isAbstract());
 		}
 		return super.getPropertyValue(id);
 	}

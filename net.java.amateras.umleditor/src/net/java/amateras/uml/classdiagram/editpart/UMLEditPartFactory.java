@@ -4,7 +4,7 @@ import net.java.amateras.uml.classdiagram.model.AggregationModel;
 import net.java.amateras.uml.classdiagram.model.AssociationModel;
 import net.java.amateras.uml.classdiagram.model.AttributeModel;
 import net.java.amateras.uml.classdiagram.model.ClassModel;
-import net.java.amateras.uml.classdiagram.model.CompositeModel;
+
 import net.java.amateras.uml.classdiagram.model.GeneralizationModel;
 
 import net.java.amateras.uml.classdiagram.model.RealizationModel;
@@ -38,9 +38,7 @@ public class UMLEditPartFactory extends BaseUMLEditPartFactory {
 			return new RootEditPart();
 		} else if(model instanceof ClassModel){
 			return new ClassEditPart();
-		}  else if(model instanceof CompositeModel){
-			return new CompositeEditPart();
-		}  else if(model instanceof GeneralizationModel){
+		} else if(model instanceof GeneralizationModel){
 			return new GeneralizationEditPart();
 		} else if(model instanceof RealizationModel){
 			return new RealizationEditPart();

@@ -10,11 +10,15 @@ import net.java.amateras.uml.model.AbstractUMLModel;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 
 public class AddAttributeAction extends AbstractTypeAction {
 	
 	public AddAttributeAction(CommandStack stack,  GraphicalViewer viewer){
-		super(UMLPlugin.getDefault().getResourceString("menu.addAttribute"), stack, viewer);
+		super("add variable"/*UMLPlugin.getDefault().getResourceString("menu.addAttribute")*/, stack, viewer);
 	}
 	
 	public void run(){
@@ -39,7 +43,22 @@ public class AddAttributeAction extends AbstractTypeAction {
 					count++;
 				}
 			}
-			attr.setName("attr" + count);
+			
+			Display display = Display.getCurrent();
+			Shell shell = display.getActiveShell();
+			
+			StateProperDialog msg = new StateProperDialog(shell, attr);
+			
+			msg.open();
+			if(msg.getStatus()==1)
+			{
+				//System.out.println(var);
+				
+				MessageBox mb = new MessageBox(shell, SWT.NONE);
+				
+				
+			}
+			//attr.setName("var" + count);
 			target.copyPresentation(attr);
 			target.addChild(attr);
 		}

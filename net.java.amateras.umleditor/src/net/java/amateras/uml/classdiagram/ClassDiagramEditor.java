@@ -94,13 +94,13 @@ public class ClassDiagramEditor extends DiagramEditor {
 
 		// モデルの作成を行うツールを格納するグループ
 		PaletteDrawer entities = new PaletteDrawer(plugin.getResourceString("palette.entity"));
-		entities.add(createEntityEntry(plugin.getResourceString("palette.entity.class"), ClassModel.class,
+		entities.add(createEntityEntry("State"/*plugin.getResourceString("palette.entity.class")*/, ClassModel.class,
 				"icons/class.gif"));
 
 		PaletteDrawer relations = new PaletteDrawer(plugin.getResourceString("palette.relation"));
 
 
-		relations.add(createConnectionEntry(plugin.getResourceString("palette.relation.generalization"),
+		relations.add(createConnectionEntry("transfer"/*plugin.getResourceString("palette.relation.generalization")*/,
 				GeneralizationModel.class, "icons/generalization.gif"));
 
 

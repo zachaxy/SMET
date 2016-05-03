@@ -15,7 +15,6 @@ import org.eclipse.ui.views.properties.TextPropertyDescriptor;
  */
 public class AttributeModel extends AbstractUMLModel implements Cloneable {
 	
-	private Visibility visibility = Visibility.PRIVATE;
 	private String name = "";
 	private String type = "int";
 	private String cons;
@@ -25,14 +24,18 @@ public class AttributeModel extends AbstractUMLModel implements Cloneable {
 
 	public void setCons(String cons) {
 		this.cons = cons;
+		firePropertyChange(P_CONS,null,cons);
+		if (getParent() != null) {
+			getParent().forceUpdate();
+		}
 	}
 
 	private boolean isStatic;
 	
-	public static final String P_VISIBILITY = "_visibility";
+
 	public static final String P_NAME = "_name";
 	public static final String P_TYPE = "_type";
-	public static final String P_STATIC = "_static";
+	public static final String P_CONS = "_cons";
 	
 	public String getName() {
 		return name;
@@ -52,26 +55,13 @@ public class AttributeModel extends AbstractUMLModel implements Cloneable {
 		firePropertyChange(P_TYPE,null,type);
 	}
 	
-	public Visibility getVisibility() {
-		return visibility;
-	}
 	
-	public void setVisibility(Visibility visibility) {
-		this.visibility = visibility;
-		firePropertyChange(P_VISIBILITY,null,visibility);
-		if (getParent() != null) {
-			getParent().forceUpdate();
-		}
-	}
 	
 	public boolean isStatic() {
 		return isStatic;
 	}
 
-	public void setStatic(boolean isStatic) {
-		this.isStatic = isStatic;
-		firePropertyChange(P_STATIC,null,new Boolean(isStatic));
-	}
+
 
 	public IPropertyDescriptor[] getPropertyDescriptors() {
 		return new IPropertyDescriptor[]{
@@ -79,10 +69,8 @@ public class AttributeModel extends AbstractUMLModel implements Cloneable {
 						UMLPlugin.getDefault().getResourceString("property.name")),
 				new TextPropertyDescriptor(P_TYPE,
 						UMLPlugin.getDefault().getResourceString("property.type")),
-				new EnumPropertyDescriptor(P_VISIBILITY,
-						UMLPlugin.getDefault().getResourceString("property.visibility"),
-						Visibility.getVisibilities()),
-				new BooleanPropertyDescriptor(P_STATIC,"constraint"
+				
+				new TextPropertyDescriptor(P_CONS,"constraint"
 						/*UMLPlugin.getDefault().getResourceString("property.static")*/)
 		};
 	}
@@ -92,10 +80,8 @@ public class AttributeModel extends AbstractUMLModel implements Cloneable {
 			return getName();
 		} else if(id.equals(P_TYPE)){
 			return getType();
-		} else if(id.equals(P_VISIBILITY)){
-			return getVisibility();
-		} else if(id.equals(P_STATIC)){
-			return new Boolean(isStatic());
+		} else if(id.equals(P_CONS)){
+			return getCons();
 		}
 		return null;
 	}
@@ -105,9 +91,7 @@ public class AttributeModel extends AbstractUMLModel implements Cloneable {
 			return true;
 		} else if(id.equals(P_TYPE)){
 			return true;
-		} else if(id.equals(P_VISIBILITY)){
-			return true;
-		} else if(id.equals(P_STATIC)){
+		} else if(id.equals(P_CONS)){
 			return true;
 		}
 		return false;
@@ -118,10 +102,8 @@ public class AttributeModel extends AbstractUMLModel implements Cloneable {
 			setName((String)value);
 		} else if(id.equals(P_TYPE)){
 			setType((String)value);
-		} else if(id.equals(P_VISIBILITY)){
-			setVisibility((Visibility)value);
-		} else if(id.equals(P_STATIC)){
-			setStatic(((Boolean)value).booleanValue());
+		}else if(id.equals(P_CONS)){
+			setCons((String)value);
 		}
 	}
 
@@ -139,8 +121,8 @@ public class AttributeModel extends AbstractUMLModel implements Cloneable {
 		AttributeModel newModel = new AttributeModel();
 		newModel.setName(getName());
 		newModel.setType(getType());
-		newModel.setVisibility(getVisibility());
-		newModel.setStatic(isStatic());
+		
+		newModel.setCons(getCons());
 		return newModel;
 	}
 	

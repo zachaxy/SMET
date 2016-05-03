@@ -39,15 +39,8 @@ public class FilterUtil {
 			AbstractUMLModel element = (AbstractUMLModel) iter.next();
 			if (element instanceof AttributeModel) {
 				AttributeModel a = (AttributeModel) element;
-				if (v_public && a.getVisibility().equals(Visibility.PUBLIC)) {
-					rv.add(a);
-				} else if (v_protected && a.getVisibility().equals(Visibility.PROTECTED)) {
-					rv.add(a);
-				} else if (v_package && a.getVisibility().equals(Visibility.PACKAGE)) {
-					rv.add(a);
-				} else if (v_private && a.getVisibility().equals(Visibility.PRIVATE)) {
-					rv.add(a);
-				}
+				rv.add(a);
+				
 			}
 		}
 		return rv;

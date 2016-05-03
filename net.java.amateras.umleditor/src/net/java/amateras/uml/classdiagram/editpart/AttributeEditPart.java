@@ -53,29 +53,13 @@ public class AttributeEditPart extends AbstractUMLEditPart {
 	private void updateLabel(AttributeLabel label, AttributeModel model) {
 		
 		if (model.isShowIcon()) {
-			if (model.getVisibility().equals(Visibility.PUBLIC)) {
-				label.setIcon(UMLPlugin.getImageDescriptor(
-						"icons/field_public.gif").createImage());
-			} else if (model.getVisibility().equals(Visibility.PRIVATE)) {
-				label.setIcon(UMLPlugin.getImageDescriptor(
-						"icons/field_private.gif").createImage());
-			} else if (model.getVisibility().equals(Visibility.PROTECTED)) {
-				label.setIcon(UMLPlugin.getImageDescriptor(
-						"icons/field_protected.gif").createImage());
-			} else if (model.getVisibility().equals(Visibility.PACKAGE)) {
-				label.setIcon(UMLPlugin.getImageDescriptor(
-						"icons/field_default.gif").createImage());
-			}
+
+			label.setIcon(UMLPlugin.getImageDescriptor(
+					"icons/field_public.gif").createImage());
 			label.setText(model.toString());
 		} else {
 			String visibility = " ";
-			if (model.getVisibility().equals(Visibility.PUBLIC)) {
-				visibility = "+";
-			} else if (model.getVisibility().equals(Visibility.PRIVATE)) {
-				visibility = "-";
-			} else if (model.getVisibility().equals(Visibility.PROTECTED)) {
-				visibility = "#";
-			}
+			
 			label.setText(visibility + model.toString());
 		}
 		label.setUnderline(model.isStatic());

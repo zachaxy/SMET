@@ -163,14 +163,6 @@ public class JavaExportWizard extends Wizard {
 	private String createAttribute(AttributeModel attr){
 		StringBuffer sb = new StringBuffer();
 		sb.append("    ");
-		String visibility = attr.getVisibility().toString();
-		if(!visibility.equals("package")){
-			sb.append(attr.getVisibility().toString());
-			sb.append(" ");
-		}
-		if(attr.isStatic()){
-			sb.append("static ");
-		}
 		sb.append(attr.getType());
 		sb.append(" ");
 		sb.append(attr.getName());

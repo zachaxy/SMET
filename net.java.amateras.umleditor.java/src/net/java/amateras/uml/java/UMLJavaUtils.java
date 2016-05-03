@@ -134,19 +134,9 @@ public class UMLJavaUtils {
 				AttributeModel attr = new AttributeModel();
 				attr.setName(fields[i].getElementName());
 				attr.setType(Signature.toString(fields[i].getTypeSignature()));
-				attr.setStatic(Flags.isStatic(fields[i].getFlags()));
+				//attr.setStatic(Flags.isStatic(fields[i].getFlags()));
 				
-				if(type.isInterface()){
-					attr.setVisibility(Visibility.PUBLIC);
-				} else if(Flags.isPublic(fields[i].getFlags())){
-					attr.setVisibility(Visibility.PUBLIC);
-				} else if(Flags.isPrivate(fields[i].getFlags())){
-					attr.setVisibility(Visibility.PRIVATE);
-				} else if(Flags.isProtected(fields[i].getFlags())){
-					attr.setVisibility(Visibility.PROTECTED);
-				} else {
-					attr.setVisibility(Visibility.PACKAGE);
-				}
+				
 				result[i] = attr;
 			}
 			return result;

@@ -30,12 +30,13 @@ public class CommonEntityModel extends AbstractUMLEntityModel implements TypeEnt
 	 */
 	public CommonEntityModel() {
 		propertyDescriptors = new IPropertyDescriptor[] {
-				new TextPropertyDescriptor(StereoTypeModel.P_STEREO_TYPE, UMLPlugin.getDefault().getResourceString("property.stereoType")),
+				//new TextPropertyDescriptor(StereoTypeModel.P_STEREO_TYPE, UMLPlugin.getDefault().getResourceString("property.stereoType")),
 				new PropertyDescriptor(P_SIMPLE_ENTITY_NAME, UMLPlugin.getDefault().getResourceString("property.simpleName")),
 				new TextPropertyDescriptor(P_ENTITY_NAME, UMLPlugin.getDefault().getResourceString("property.name")),
 				new ColorPropertyDescriptor(P_BACKGROUND_COLOR, UMLPlugin.getDefault().getResourceString("property.background")),
-				new PropertyDescriptor(P_ATTRIBUTES, UMLPlugin.getDefault().getResourceString("property.attributes")),
-				new PropertyDescriptor(P_OPERATIONS, UMLPlugin.getDefault().getResourceString("property.operations")) };
+				new PropertyDescriptor(P_ATTRIBUTES, "Variables"/*UMLPlugin.getDefault().getResourceString("property.attributes")*/),
+				//new PropertyDescriptor(P_OPERATIONS, UMLPlugin.getDefault().getResourceString("property.operations")) 
+				};
 	}
 
 	/**

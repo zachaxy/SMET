@@ -3,13 +3,19 @@ package net.java.amateras.uml.classdiagram.action;
 import java.util.List;
 
 import net.java.amateras.uml.UMLPlugin;
+import net.java.amateras.uml.classdiagram.editpart.AttributeEditPart;
+import net.java.amateras.uml.classdiagram.editpart.GeneralizationEditPart;
 import net.java.amateras.uml.classdiagram.model.AttributeModel;
+import net.java.amateras.uml.classdiagram.model.GeneralizationModel;
+import net.java.amateras.uml.editpart.AbstractUMLConnectionEditPart;
+import net.java.amateras.uml.editpart.AbstractUMLEntityEditPart;
 import net.java.amateras.uml.model.AbstractUMLEntityModel;
 import net.java.amateras.uml.model.AbstractUMLModel;
 
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
@@ -18,7 +24,7 @@ import org.eclipse.swt.widgets.Shell;
 public class AddAttributeAction extends AbstractTypeAction {
 	
 	public AddAttributeAction(CommandStack stack,  GraphicalViewer viewer){
-		super("add variable"/*UMLPlugin.getDefault().getResourceString("menu.addAttribute")*/, stack, viewer);
+		super("添加变量"/*UMLPlugin.getDefault().getResourceString("menu.addAttribute")*/, stack, viewer);
 	}
 	
 	public void run(){
@@ -54,13 +60,13 @@ public class AddAttributeAction extends AbstractTypeAction {
 			{
 				//System.out.println(var);
 				
-				MessageBox mb = new MessageBox(shell, SWT.NONE);
-				
+			
+				target.copyPresentation(attr);
+				target.addChild(attr);
 				
 			}
 			//attr.setName("var" + count);
-			target.copyPresentation(attr);
-			target.addChild(attr);
+			
 		}
 		
 		public void undo() {

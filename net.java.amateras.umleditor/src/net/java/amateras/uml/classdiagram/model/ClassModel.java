@@ -30,13 +30,13 @@ public class ClassModel extends CommonEntityModel {
 	public ClassModel() {
 		setName("State" + number);
 		number++;
-		int newLength = propertyDescriptors.length + 1;
+		int newLength = propertyDescriptors.length;
 
 		IPropertyDescriptor[] newPropertyDescriptors = new IPropertyDescriptor[newLength];
 		System.arraycopy(propertyDescriptors, 0, newPropertyDescriptors, 0, propertyDescriptors.length);
 
-		newPropertyDescriptors[newLength - 1] =
-			new BooleanPropertyDescriptor(P_ABSTRACT, "StateType"/*UMLPlugin.getDefault().getResourceString("property.abstract")*/);
+		//newPropertyDescriptors[newLength - 1] =
+			//new BooleanPropertyDescriptor(P_ABSTRACT, "StateType"/*UMLPlugin.getDefault().getResourceString("property.abstract")*/);
 
 		propertyDescriptors = newPropertyDescriptors;
 	}

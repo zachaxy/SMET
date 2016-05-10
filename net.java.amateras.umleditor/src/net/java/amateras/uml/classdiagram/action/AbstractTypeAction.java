@@ -2,6 +2,9 @@ package net.java.amateras.uml.classdiagram.action;
 
 import net.java.amateras.uml.action.AbstractUMLEditorAction;
 import net.java.amateras.uml.classdiagram.editpart.AttributeEditPart;
+import net.java.amateras.uml.classdiagram.editpart.GeneralizationEditPart;
+import net.java.amateras.uml.classdiagram.model.GeneralizationModel;
+import net.java.amateras.uml.editpart.AbstractUMLConnectionEditPart;
 import net.java.amateras.uml.editpart.AbstractUMLEntityEditPart;
 import net.java.amateras.uml.model.AbstractUMLEntityModel;
 
@@ -18,6 +21,7 @@ public abstract class AbstractTypeAction extends AbstractUMLEditorAction {
 	
 	protected CommandStack stack;
 	protected AbstractUMLEntityModel target;
+	protected GeneralizationModel conn_target;
 	
 	public AbstractTypeAction(String name, CommandStack stack,  GraphicalViewer viewer){
 		super(name, viewer);
@@ -31,6 +35,7 @@ public abstract class AbstractTypeAction extends AbstractUMLEditorAction {
 	 */
 	public void update(IStructuredSelection sel){
 		Object obj = sel.getFirstElement();
+		
 		if(obj!=null && obj instanceof AbstractUMLEntityEditPart){
 			setEnabled(true);
 			target = (AbstractUMLEntityModel)((AbstractUMLEntityEditPart)obj).getModel();

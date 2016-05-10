@@ -5,11 +5,12 @@ import net.java.amateras.uml.classdiagram.property.EnumPropertyDescriptor;
 import net.java.amateras.uml.model.AbstractUMLModel;
 import net.java.amateras.uml.properties.BooleanPropertyDescriptor;
 
+import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
 /**
- * ‘®«‚ğ•\‚·ƒ‚ƒfƒ‹ƒIƒuƒWƒFƒNƒgB
+ * å±æ€§ã‚’è¡¨ã™ãƒ¢ãƒ‡ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã€‚
  * 
  * @author Naoki Takezoe
  */
@@ -17,7 +18,28 @@ public class AttributeModel extends AbstractUMLModel implements Cloneable {
 	
 	private String name = "";
 	private String type = "int";
-	private String cons;
+	private String cons="";
+	private String kind="";
+	public static final String VAR_INPUT="è¾“å…¥å˜é‡";
+	public static final String VAR_MID="ä¸­é—´å˜é‡";
+	public static final String VAR_OUTPUT="è¾“å‡ºå˜é‡";
+	public static final String []KIND_ARR = new String[]{VAR_INPUT, VAR_MID, VAR_OUTPUT};
+	public static final String VAR_TYPE_INT="Int";
+	public static final String VAR_TYPE_DOUBLE="Double";
+	public static final String VAR_TYPE_CHAR="Char";
+	public static final String []TYPE_ARR = new String[]{VAR_TYPE_INT, VAR_TYPE_DOUBLE, VAR_TYPE_CHAR};
+	public String getKind() {
+		return kind;
+	}
+
+	public void setKind(String kind) {
+		this.kind = kind;
+		firePropertyChange(P_KIND,null,kind);
+		if (getParent() != null) {
+			getParent().forceUpdate();
+		}
+	}
+
 	public String getCons() {
 		return cons;
 	}
@@ -36,6 +58,7 @@ public class AttributeModel extends AbstractUMLModel implements Cloneable {
 	public static final String P_NAME = "_name";
 	public static final String P_TYPE = "_type";
 	public static final String P_CONS = "_cons";
+	public static final String P_KIND = "_kind";
 	
 	public String getName() {
 		return name;
@@ -67,11 +90,12 @@ public class AttributeModel extends AbstractUMLModel implements Cloneable {
 		return new IPropertyDescriptor[]{
 				new TextPropertyDescriptor(P_NAME, 
 						UMLPlugin.getDefault().getResourceString("property.name")),
-				new TextPropertyDescriptor(P_TYPE,
-						UMLPlugin.getDefault().getResourceString("property.type")),
-				
+				//new TextPropertyDescriptor(P_TYPE,
+					//	UMLPlugin.getDefault().getResourceString("property.type")),
+				new ComboBoxPropertyDescriptor(P_TYPE, "å˜é‡ç±»å‹", TYPE_ARR),
 				new TextPropertyDescriptor(P_CONS,"constraint"
-						/*UMLPlugin.getDefault().getResourceString("property.static")*/)
+						/*UMLPlugin.getDefault().getResourceString("property.static")*/),
+				new ComboBoxPropertyDescriptor(P_KIND, "å˜é‡åˆ†ç±»", KIND_ARR)
 		};
 	}
 
@@ -79,9 +103,27 @@ public class AttributeModel extends AbstractUMLModel implements Cloneable {
 		if(id.equals(P_NAME)){
 			return getName();
 		} else if(id.equals(P_TYPE)){
-			return getType();
+			if(getType().equals(VAR_TYPE_INT))
+				return 0;
+			else if(getType().equals(VAR_TYPE_DOUBLE))
+				return 1;
+			else if(getType().equals(VAR_TYPE_CHAR))
+				return 2;
+			else
+				return 3;
 		} else if(id.equals(P_CONS)){
 			return getCons();
+		}else if(id.equals(P_KIND)){
+		
+			if(getKind().equals(VAR_INPUT))
+				return 0;
+			else if(getKind().equals(VAR_MID))
+				return 1;
+			else if(getKind().equals(VAR_OUTPUT))
+				return 2;
+			else
+				return 3;
+			
 		}
 		return null;
 	}
@@ -93,6 +135,8 @@ public class AttributeModel extends AbstractUMLModel implements Cloneable {
 			return true;
 		} else if(id.equals(P_CONS)){
 			return true;
+		}else if(id.equals(P_KIND)){
+			return true;
 		}
 		return false;
 	}
@@ -101,9 +145,26 @@ public class AttributeModel extends AbstractUMLModel implements Cloneable {
 		if(id.equals(P_NAME)){
 			setName((String)value);
 		} else if(id.equals(P_TYPE)){
-			setType((String)value);
+			if((Integer)value == 0)
+				setType(VAR_TYPE_INT);
+			else if((Integer)value == 1)
+				setType(VAR_TYPE_DOUBLE);
+			else if((Integer)value == 2)
+				setType(VAR_TYPE_CHAR);
+			else 
+				setType("é”™è¯¯");
 		}else if(id.equals(P_CONS)){
 			setCons((String)value);
+		}else if(id.equals(P_KIND)){
+		
+			if((Integer)value == 0)
+				setKind(VAR_INPUT);
+			else if((Integer)value == 1)
+					setKind(VAR_MID);
+			else if((Integer)value == 2)
+					setKind(VAR_OUTPUT);
+			else 
+				setKind("é”™è¯¯");
 		}
 	}
 
@@ -114,6 +175,11 @@ public class AttributeModel extends AbstractUMLModel implements Cloneable {
 		sb.append(getName());
 		sb.append(": ");
 		sb.append(getType());
+		sb.append(": ");
+		sb.append(getKind());
+		sb.append("(");
+		sb.append(getCons());
+		sb.append(")");
 		return sb.toString();
 	}
 

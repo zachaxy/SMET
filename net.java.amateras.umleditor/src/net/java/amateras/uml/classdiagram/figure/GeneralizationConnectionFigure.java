@@ -6,6 +6,7 @@ package net.java.amateras.uml.classdiagram.figure;
 import net.java.amateras.uml.figure.PresentationFigure;
 import net.java.amateras.uml.model.AbstractUMLModel;
 
+import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.PolygonDecoration;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.swt.SWT;
@@ -22,7 +23,6 @@ public class GeneralizationConnectionFigure extends PolylineConnection
 		PolygonDecoration decoration = new PolygonDecoration();
 		decoration.setScale(10, 7);
 		decoration.setBackgroundColor(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-		
 		setTargetDecoration(decoration);
 	}
 	/* (non-Javadoc)
@@ -30,6 +30,22 @@ public class GeneralizationConnectionFigure extends PolylineConnection
 	 */
 	public void updatePresentation(AbstractUMLModel model) {
 		setForegroundColor(model.getForegroundColor());
+		
 	}
+	@Override
+	protected void fillShape(Graphics g) {
+		// TODO Auto-generated method stub
+		super.fillShape(g);
+	}
+	@Override
+	protected void outlineShape(Graphics g) {
+		// TODO Auto-generated method stub
+		super.outlineShape(g);
+	
+	}
+
+	
+
+	
 
 }

@@ -1,5 +1,10 @@
 package net.java.amateras.uml;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.Iterator;
@@ -10,11 +15,24 @@ import net.java.amateras.uml.action.CopyAsImageAction;
 import net.java.amateras.uml.action.OpenOutlineViewAction;
 import net.java.amateras.uml.action.OpenPropertyViewAction;
 import net.java.amateras.uml.action.SaveAsImageAction;
+import net.java.amateras.uml.classdiagram.action.AddAttributeAction;
+import net.java.amateras.uml.classdiagram.editpart.ClassEditPart;
+import net.java.amateras.uml.classdiagram.editpart.GeneralizationEditPart;
+import net.java.amateras.uml.classdiagram.model.AttributeModel;
+import net.java.amateras.uml.classdiagram.model.ClassModel;
+import net.java.amateras.uml.classdiagram.model.GeneralizationModel;
+import net.java.amateras.uml.classdiagram.model.OperationModel;
 import net.java.amateras.uml.dnd.UMLDropTargetListenerFactory;
+import net.java.amateras.uml.model.AbstractUMLConnectionModel;
 import net.java.amateras.uml.model.AbstractUMLEntityModel;
 import net.java.amateras.uml.model.AbstractUMLModel;
 import net.java.amateras.uml.model.RootModel;
 
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.XMLWriter;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
@@ -89,14 +107,15 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
  * @author Takahiro Shida.
  */
 public abstract class DiagramEditor extends GraphicalEditorWithPalette
-	implements IPropertyChangeListener, IResourceChangeListener {
+		implements IPropertyChangeListener, IResourceChangeListener {
 
 	private boolean savePreviouslyNeeded = false;
-	private AbstractUMLEditorAction openOutlineAction  = null;
+	private AbstractUMLEditorAction openOutlineAction = null;
 	private AbstractUMLEditorAction openPropertyAction = null;
-	private AbstractUMLEditorAction saveAsImageAction  = null;
-	private AbstractUMLEditorAction copyAsImageAction  = null;
+	private AbstractUMLEditorAction saveAsImageAction = null;
+	private AbstractUMLEditorAction copyAsImageAction = null;
 	private boolean needViewerRefreshFlag = true;
+	private GraphicalViewer viewer;
 
 	private KeyHandler sharedKeyHandler;
 
@@ -112,18 +131,18 @@ public abstract class DiagramEditor extends GraphicalEditorWithPalette
 	}
 
 	protected void initializeGraphicalViewer() {
-		GraphicalViewer viewer = getGraphicalViewer();
-		IFile file = ((IFileEditorInput)getEditorInput()).getFile();
+		viewer = getGraphicalViewer();
+		IFile file = ((IFileEditorInput) getEditorInput()).getFile();
 		RootModel root = null;
-		if(file.exists()){
+		if (file.exists()) {
 			try {
 				root = DiagramSerializer.deserialize(file.getContents());
 				validateModel(root);
-			} catch(Exception ex){
+			} catch (Exception ex) {
 				UMLPlugin.logException(ex);
 			}
 		}
-		if(root == null){
+		if (root == null) {
 			root = createInitializeModel();
 		}
 		viewer.setContents(root);
@@ -131,7 +150,7 @@ public abstract class DiagramEditor extends GraphicalEditorWithPalette
 		applyPreferences();
 	}
 
-	private void refreshGraphicalViewer(){
+	private void refreshGraphicalViewer() {
 		IEditorInput input = getEditorInput();
 		if (input instanceof IFileEditorInput) {
 			try {
@@ -142,7 +161,7 @@ public abstract class DiagramEditor extends GraphicalEditorWithPalette
 				RootModel newRoot = null;
 				try {
 					newRoot = DiagramSerializer.deserialize(file.getContents());
-				} catch(Exception ex){
+				} catch (Exception ex) {
 					UMLPlugin.logException(ex);
 					return;
 				}
@@ -171,7 +190,7 @@ public abstract class DiagramEditor extends GraphicalEditorWithPalette
 							if (!getPartName().equals(file.getName())) {
 								setPartName(file.getName());
 							}
-							if(needViewerRefreshFlag){
+							if (needViewerRefreshFlag) {
 								refreshGraphicalViewer();
 							} else {
 								needViewerRefreshFlag = true;
@@ -183,29 +202,27 @@ public abstract class DiagramEditor extends GraphicalEditorWithPalette
 		}
 	}
 
-	public void propertyChange(PropertyChangeEvent event){
+	public void propertyChange(PropertyChangeEvent event) {
 		applyPreferences();
 	}
 
-	protected void applyPreferences(){
+	protected void applyPreferences() {
 		IPreferenceStore store = UMLPlugin.getDefault().getPreferenceStore();
 
 		getGraphicalViewer().setProperty(SnapToGrid.PROPERTY_GRID_ENABLED,
-		                new Boolean(store.getBoolean(UMLPlugin.PREF_SHOW_GRID)));
+				new Boolean(store.getBoolean(UMLPlugin.PREF_SHOW_GRID)));
 		getGraphicalViewer().setProperty(SnapToGrid.PROPERTY_GRID_VISIBLE,
-		                new Boolean(store.getBoolean(UMLPlugin.PREF_SHOW_GRID)));
+				new Boolean(store.getBoolean(UMLPlugin.PREF_SHOW_GRID)));
 
 		int gridSize = store.getInt(UMLPlugin.PREF_GRID_SIZE);
-		getGraphicalViewer().setProperty(SnapToGrid.PROPERTY_GRID_SPACING,
-		                new Dimension(gridSize, gridSize));
+		getGraphicalViewer().setProperty(SnapToGrid.PROPERTY_GRID_SPACING, new Dimension(gridSize, gridSize));
 
 		getGraphicalViewer().setProperty(SnapToGeometry.PROPERTY_SNAP_ENABLED,
-		                new Boolean(store.getBoolean(UMLPlugin.PREF_SNAP_GEOMETRY)));
+				new Boolean(store.getBoolean(UMLPlugin.PREF_SNAP_GEOMETRY)));
 	}
 
 	/**
-	 * 埲慜偺僶乕僕儑儞偱嶌惉偝傟偨僼傽僀儖傪帺摦廋惓偡傞.
-	 * -v2.0 恊巕娭學偺捛壛
+	 * 埲慜偺僶乕僕儑儞偱嶌惉偝傟偨僼傽僀儖傪帺摦廋惓偡傞. -v2.0 恊巕娭學偺捛壛
 	 */
 	private void validateModel(AbstractUMLEntityModel parent) {
 		List<AbstractUMLModel> children = parent.getChildren();
@@ -219,20 +236,24 @@ public abstract class DiagramEditor extends GraphicalEditorWithPalette
 			}
 		}
 	}
+
 	/**
 	 * 儘乕僪偵幐攕偟偨応崌偺弶婜儌僨儖傪曉媝偡傞.
+	 * 
 	 * @return
 	 */
 	protected abstract RootModel createInitializeModel();
 
 	/**
 	 * 僄僨傿僞偺僞僀僾傪曉媝偡傞. (ex class)
+	 * 
 	 * @return
 	 */
 	protected abstract String getDiagramType();
 
 	/**
 	 * Diagram儌僨儖傪曉媝偡傞.
+	 * 
 	 * @return
 	 */
 	public static final RootModel getActiveDiagramModel() {
@@ -285,38 +306,34 @@ public abstract class DiagramEditor extends GraphicalEditorWithPalette
 		ScalableRootEditPart rootEditPart = new ScalableRootEditPart();
 		viewer.setRootEditPart(rootEditPart);
 
-	    // ZoomManager偺庢摼
-	    ZoomManager manager = rootEditPart.getZoomManager();
+		// ZoomManager偺庢摼
+		ZoomManager manager = rootEditPart.getZoomManager();
 
-	    // 僘乕儉儗儀儖偺愝掕
-	    double[] zoomLevels = new double[] {
-	      0.25,0.5,0.75,1.0,1.5,2.0,2.5,3.0,4.0,5.0,10.0,20.0
-	    };
-	    manager.setZoomLevels(zoomLevels);
+		// 僘乕儉儗儀儖偺愝掕
+		double[] zoomLevels = new double[] { 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 2.5, 3.0, 4.0, 5.0, 10.0, 20.0 };
+		manager.setZoomLevels(zoomLevels);
 
-	    // 僘乕儉 儗儀儖 僐儞僩儕價儏乕僔儑儞偺愝掕
-	    ArrayList<String> zoomContributions = new ArrayList<String>();
-	    zoomContributions.add(ZoomManager.FIT_ALL);
-	    zoomContributions.add(ZoomManager.FIT_HEIGHT);
-	    zoomContributions.add(ZoomManager.FIT_WIDTH);
-	    manager.setZoomLevelContributions(zoomContributions);
-	    // 奼戝傾僋僔儑儞偺嶌惉偲搊榐
-	    getActionRegistry().registerAction(new ZoomInAction(manager));
-	    // 弅彫傾僋僔儑儞偺嶌惉偲搊榐
-	    getActionRegistry().registerAction(new ZoomOutAction(manager));
+		// 僘乕儉 儗儀儖 僐儞僩儕價儏乕僔儑儞偺愝掕
+		ArrayList<String> zoomContributions = new ArrayList<String>();
+		zoomContributions.add(ZoomManager.FIT_ALL);
+		zoomContributions.add(ZoomManager.FIT_HEIGHT);
+		zoomContributions.add(ZoomManager.FIT_WIDTH);
+		manager.setZoomLevelContributions(zoomContributions);
+		// 奼戝傾僋僔儑儞偺嶌惉偲搊榐
+		getActionRegistry().registerAction(new ZoomInAction(manager));
+		// 弅彫傾僋僔儑儞偺嶌惉偲搊榐
+		getActionRegistry().registerAction(new ZoomOutAction(manager));
 
-        getGraphicalViewer().setKeyHandler(
-                new GraphicalViewerKeyHandler(getGraphicalViewer()));
+		getGraphicalViewer().setKeyHandler(new GraphicalViewerKeyHandler(getGraphicalViewer()));
 
-	    // 僐儞僥僋僗僩儊僯儏乕偺嶌惉
-	    String menuId = this.getClass().getName() + ".EditorContext";
-
+		// 僐儞僥僋僗僩儊僯儏乕偺嶌惉
+		String menuId = this.getClass().getName() + ".EditorContext";
 
 		MenuManager menuMgr = new MenuManager(menuId, menuId);
 		openPropertyAction = new OpenPropertyViewAction(viewer);
-		openOutlineAction  = new OpenOutlineViewAction(viewer);
-		saveAsImageAction  = new SaveAsImageAction(viewer);
-		copyAsImageAction  = new CopyAsImageAction(viewer);
+		openOutlineAction = new OpenOutlineViewAction(viewer);
+		saveAsImageAction = new SaveAsImageAction(viewer);
+		copyAsImageAction = new CopyAsImageAction(viewer);
 		createDiagramAction(viewer);
 
 		getSite().registerContextMenu(menuId, menuMgr, viewer);
@@ -335,21 +352,23 @@ public abstract class DiagramEditor extends GraphicalEditorWithPalette
 		});
 
 		// Actions
-//		IAction showRulers = new ToggleRulerVisibilityAction(getGraphicalViewer());
-//		getActionRegistry().registerAction(showRulers);
-//
-//		IAction snapAction = new ToggleSnapToGeometryAction(getGraphicalViewer());
-//		getActionRegistry().registerAction(snapAction);
-//
-//		IAction showGrid = new ToggleGridAction(getGraphicalViewer());
-//		getActionRegistry().registerAction(showGrid);
+		// IAction showRulers = new
+		// ToggleRulerVisibilityAction(getGraphicalViewer());
+		// getActionRegistry().registerAction(showRulers);
+		//
+		// IAction snapAction = new
+		// ToggleSnapToGeometryAction(getGraphicalViewer());
+		// getActionRegistry().registerAction(snapAction);
+		//
+		// IAction showGrid = new ToggleGridAction(getGraphicalViewer());
+		// getActionRegistry().registerAction(showGrid);
 
 		menuMgr.add(new Separator("edit"));
 		menuMgr.add(getActionRegistry().getAction(ActionFactory.DELETE.getId()));
 		menuMgr.add(getActionRegistry().getAction(ActionFactory.UNDO.getId()));
 		menuMgr.add(getActionRegistry().getAction(ActionFactory.REDO.getId()));
-//		menuMgr.add(getActionRegistry().getAction(ActionFactory.COPY.getId()));
-//		menuMgr.add(getActionRegistry().getAction(ActionFactory.PASTE.getId()));
+		// menuMgr.add(getActionRegistry().getAction(ActionFactory.COPY.getId()));
+		// menuMgr.add(getActionRegistry().getAction(ActionFactory.PASTE.getId()));
 		menuMgr.add(new Separator("zoom"));
 		menuMgr.add(getActionRegistry().getAction(GEFActionConstants.ZOOM_IN));
 		menuMgr.add(getActionRegistry().getAction(GEFActionConstants.ZOOM_OUT));
@@ -364,18 +383,20 @@ public abstract class DiagramEditor extends GraphicalEditorWithPalette
 		menuMgr.add(new Separator("generate"));
 		menuMgr.add(new Separator("additions"));
 		viewer.setContextMenu(menuMgr);
-		viewer.setKeyHandler(new GraphicalViewerKeyHandler(viewer)
-				.setParent(getCommonKeyHandler()));
+		viewer.setKeyHandler(new GraphicalViewerKeyHandler(viewer).setParent(getCommonKeyHandler()));
 
 	}
+
 	/**
 	 * 僞僀僾偵摿壔偟偨傾僋僔儑儞傪嶌傞.
+	 * 
 	 * @param viewer
 	 */
 	protected abstract void createDiagramAction(GraphicalViewer viewer);
 
 	/**
 	 * 傾僋僔儑儞傪僐儞僥僉僗僩儊僯儏乕偵愝掕偡傞.
+	 * 
 	 * @param manager
 	 */
 	protected abstract void fillDiagramPopupMenu(MenuManager manager);
@@ -388,13 +409,31 @@ public abstract class DiagramEditor extends GraphicalEditorWithPalette
 	public void doSave(IProgressMonitor monitor) {
 		try {
 			IEditorInput input = getEditorInput();
-			if(input instanceof IFileEditorInput){
+			if (input instanceof IFileEditorInput) {
 				needViewerRefreshFlag = false;
-				IFile file = ((IFileEditorInput)input).getFile();
-				file.setContents(DiagramSerializer.serialize((RootModel)getGraphicalViewer().getContents().getModel()),
-						true,true,monitor);
+				IFile file = ((IFileEditorInput) input).getFile();
+				file.setContents(DiagramSerializer.serialize((RootModel) getGraphicalViewer().getContents().getModel()),
+						true, true, monitor);
+						// System.out.println("file
+						// name:"+file.getName()+"\nfile
+						// path:"+file.getFullPath().toOSString());
+						// System.out.println("实际的路径:"+file.getLocation().toOSString());
+
+				// RootModel rootModel =
+				// (RootModel)getGraphicalViewer().getContents().getModel();
+				// list中model的顺序是按照填入editor时的顺序来的.
+				/*List<GeneralizationEditPart> tList = ((ClassEditPart) viewer.getContents().getChildren().get(0))
+						.getSourceConnections();
+
+				GeneralizationModel gm0 = (GeneralizationModel) (tList.get(0).getModel());
+				System.out.println(gm0.getTransCond());
+				GeneralizationModel gm1 = (GeneralizationModel) (tList.get(1).getModel());
+				System.out.println(gm1.getTransCond());*/
+
+				// TODO:添加写入EIA的功能
+				saveAsEIA(file.getLocation().toOSString());
 			}
-		} catch(Exception ex){
+		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}
 		getCommandStack().markSaveLocation();
@@ -408,7 +447,7 @@ public abstract class DiagramEditor extends GraphicalEditorWithPalette
 		return true;
 	}
 
-	public void dispose(){
+	public void dispose() {
 		UMLPlugin.getDefault().getPreferenceStore().removePropertyChangeListener(this);
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
 		super.dispose();
@@ -438,78 +477,76 @@ public abstract class DiagramEditor extends GraphicalEditorWithPalette
 	/**
 	 * 僄儞僥傿僥傿梡偺PaletteEntry傪嶌惉偟傑偡丅
 	 *
-	 * @param itemName 僷儗僢僩偵昞帵偡傞傾僀僥儉柤
-	 * @param clazz 儌僨儖偺僋儔僗
-	 * @param icon 僷儗僢僩偵昞帵偡傞傾僀僐儞偺僷僗
+	 * @param itemName
+	 *            僷儗僢僩偵昞帵偡傞傾僀僥儉柤
+	 * @param clazz
+	 *            儌僨儖偺僋儔僗
+	 * @param icon
+	 *            僷儗僢僩偵昞帵偡傞傾僀僐儞偺僷僗
 	 * @return PaletteEntry
 	 */
-	protected PaletteEntry createEntityEntry(String itemName,Class<?> clazz,String icon){
-		CreationToolEntry entry = new CreationToolEntry(
-				itemName,
-				itemName,
-				new SimpleFactory(clazz),
-				UMLPlugin.getImageDescriptor(icon),
-				UMLPlugin.getImageDescriptor(icon));
+	protected PaletteEntry createEntityEntry(String itemName, Class<?> clazz, String icon) {
+		CreationToolEntry entry = new CreationToolEntry(itemName, itemName, new SimpleFactory(clazz),
+				UMLPlugin.getImageDescriptor(icon), UMLPlugin.getImageDescriptor(icon));
 		return entry;
 	}
 
 	/**
 	 * 僐僱僋僔儑儞梡偺PaletteEntry傪嶌惉偟傑偡丅
 	 *
-	 * @param itemName 僷儗僢僩偵昞帵偡傞傾僀僥儉柤
-	 * @param clazz 儌僨儖偺僋儔僗
-	 * @param icon 僷儗僢僩偵昞帵偡傞傾僀僐儞偺僷僗
+	 * @param itemName
+	 *            僷儗僢僩偵昞帵偡傞傾僀僥儉柤
+	 * @param clazz
+	 *            儌僨儖偺僋儔僗
+	 * @param icon
+	 *            僷儗僢僩偵昞帵偡傞傾僀僐儞偺僷僗
 	 * @return PaletteEntry
 	 */
-	protected PaletteEntry createConnectionEntry(String itemName,Class<?> clazz,String icon){
-		ConnectionCreationToolEntry entry = new ConnectionCreationToolEntry(
-				itemName,
-				itemName,
-				new SimpleFactory(clazz),
-				UMLPlugin.getImageDescriptor(icon),
-				UMLPlugin.getImageDescriptor(icon));
+	protected PaletteEntry createConnectionEntry(String itemName, Class<?> clazz, String icon) {
+		ConnectionCreationToolEntry entry = new ConnectionCreationToolEntry(itemName, itemName,
+				new SimpleFactory(clazz), UMLPlugin.getImageDescriptor(icon), UMLPlugin.getImageDescriptor(icon));
 		return entry;
 	}
 
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		super.selectionChanged(part,selection);
+		super.selectionChanged(part, selection);
 		if (selection instanceof IStructuredSelection) {
-			openPropertyAction.update((IStructuredSelection)selection);
-			openOutlineAction.update((IStructuredSelection)selection);
-			saveAsImageAction.update((IStructuredSelection)selection);
+			openPropertyAction.update((IStructuredSelection) selection);
+			openOutlineAction.update((IStructuredSelection) selection);
+			saveAsImageAction.update((IStructuredSelection) selection);
 			updateDiagramAction(selection);
 		}
 	}
 
 	/**
-	 * Returns the KeyHandler with common bindings for both the Outline and Graphical Views.
-	 * For example, delete is a common action.
+	 * Returns the KeyHandler with common bindings for both the Outline and
+	 * Graphical Views. For example, delete is a common action.
 	 */
-	protected KeyHandler getCommonKeyHandler(){
-		if (sharedKeyHandler == null){
+	protected KeyHandler getCommonKeyHandler() {
+		if (sharedKeyHandler == null) {
 			sharedKeyHandler = new KeyHandler();
-			sharedKeyHandler.put(
-				KeyStroke.getPressed(SWT.F2, 0),
-				getActionRegistry().getAction(GEFActionConstants.DIRECT_EDIT));
+			sharedKeyHandler.put(KeyStroke.getPressed(SWT.F2, 0),
+					getActionRegistry().getAction(GEFActionConstants.DIRECT_EDIT));
 		}
 		return sharedKeyHandler;
 	}
 
 	/**
 	 * 傾僋僔儑儞傪峏怴偡傞.
+	 * 
 	 * @param selection
 	 */
 	protected abstract void updateDiagramAction(ISelection selection);
 
 	@SuppressWarnings("unchecked")
 	public Object getAdapter(Class type) {
-		if (type == ZoomManager.class){
+		if (type == ZoomManager.class) {
 			return ((ScalableRootEditPart) getGraphicalViewer().getRootEditPart()).getZoomManager();
 		}
 		if (type == IContentOutlinePage.class) {
 			return new UMLContentOutlinePage();
 		}
-		if (type == RootModel.class){
+		if (type == RootModel.class) {
 			return getGraphicalViewer().getContents().getModel();
 		}
 		if (type == CommandStack.class) {
@@ -519,8 +556,7 @@ public abstract class DiagramEditor extends GraphicalEditorWithPalette
 	}
 
 	/**
-	 * UML僄僨傿僞偺傾僂僩儔僀儞儁乕僕丅
-	 * 僟僀傾僌儔儉偺僒儉僱僀儖傪昞帵偟傑偡丅
+	 * UML僄僨傿僞偺傾僂僩儔僀儞儁乕僕丅 僟僀傾僌儔儉偺僒儉僱僀儖傪昞帵偟傑偡丅
 	 */
 	private class UMLContentOutlinePage implements IContentOutlinePage {
 
@@ -533,8 +569,8 @@ public abstract class DiagramEditor extends GraphicalEditorWithPalette
 			LightweightSystem lws = new LightweightSystem(canvas);
 
 			// RootEditPart偺價儏乕傪僜乕僗偲偟偰僒儉僱僀儖傪嶌惉
-			ScalableRootEditPart rootEditPart = (ScalableRootEditPart)getGraphicalViewer().getRootEditPart();
-			this.thumbnail = new ScrollableThumbnail((Viewport)rootEditPart.getFigure());
+			ScalableRootEditPart rootEditPart = (ScalableRootEditPart) getGraphicalViewer().getRootEditPart();
+			this.thumbnail = new ScrollableThumbnail((Viewport) rootEditPart.getFigure());
 			this.thumbnail.setSource(rootEditPart.getLayer(LayerConstants.PRINTABLE_LAYERS));
 			lws.setContents(thumbnail);
 
@@ -552,12 +588,12 @@ public abstract class DiagramEditor extends GraphicalEditorWithPalette
 			getGraphicalViewer().getControl().addDisposeListener(disposeListener);
 		}
 
-		public Control getControl(){
+		public Control getControl() {
 			return this.canvas;
 		}
 
 		public void dispose() {
-			if (getGraphicalViewer().getControl() != null && !getGraphicalViewer().getControl().isDisposed()){
+			if (getGraphicalViewer().getControl() != null && !getGraphicalViewer().getControl().isDisposed()) {
 				getGraphicalViewer().getControl().removeDisposeListener(disposeListener);
 			}
 		}
@@ -588,5 +624,85 @@ public abstract class DiagramEditor extends GraphicalEditorWithPalette
 		}
 	}
 
+	private void saveAsEIA(String path) {
+		if (path.endsWith(".cld")) {
+			path = path.substring(0, path.length() - 3) + "eia";
+			System.out.println(path);
+			File file = new File(path);
+			if (file.exists()) {
+				System.out.println("原始EIA已存在需要删除掉");
+				if (!file.delete()) {
+					System.err.println();
+				}
+			}
 
+			try {
+				Document document = DocumentHelper.createDocument();
+				Element root = document.addElement("scxml");
+				Element parameterElement = root.addElement("parameterlist");
+
+				Element EIAInfoElement = root.addElement("EIAInfo");
+				Element inputsElement = EIAInfoElement.addElement("inputs");
+				Element outputsElement = EIAInfoElement.addElement("outputs");
+
+				List<ClassEditPart> list = viewer.getContents().getChildren();
+
+				for (int i = 0; i < list.size(); i++) {
+					// System.out.println(((ClassModel)list.get(i).getModel()).getName());
+					ClassModel model = (ClassModel) list.get(i).getModel();
+					if (list.get(i).getTargetConnections().size() == 0) {
+						root.addAttribute("initial", model.getName());
+					}
+//					List<GeneralizationModel> outLine = list.get(i).getSourceConnections();
+					List<GeneralizationEditPart> outLine = list.get(i).getSourceConnections();
+					/*GeneralizationModel gg = outLine.get(0);
+					gg.getTarget().getClass().getName();*/
+					Element stateElement = root.addElement("state");
+					stateElement.addAttribute("id", model.getName());
+					for (int k = 0; k < outLine.size(); k++) {
+						/*GeneralizationModel gm0 = (GeneralizationModel) (tList.get(0).getModel());
+						System.out.println(gm0.getTransCond());*/
+						Element transitionElement = stateElement.addElement("transition").addAttribute("cond",((GeneralizationModel)outLine.get(k).getModel()).getTransCond())
+								.addAttribute("target",((ClassModel)outLine.get(k).getTarget().getModel()).getName());
+						/*System.out.println("******\n"+((ClassModel)outLine.get(k).getSource().getModel()).getName());
+						System.out.println(((ClassModel)outLine.get(k).getTarget().getModel()).getName()+"\n******");*/
+						
+						//Element onEntryElement = transitionElement.addElement("onEntry");
+					}
+					List<AbstractUMLModel> varList = model.getChildren();
+					for (int j = 0; j < varList.size(); j++) {
+						AbstractUMLModel child = varList.get(j);
+						if (child instanceof AttributeModel) {
+							System.out.println(((AttributeModel) child).getName());
+							System.out.println(((AttributeModel) child).getKind());
+							System.out.println(((AttributeModel) child).getType());
+							System.out.println(((AttributeModel) child).getCons());
+							parameterElement.addElement("parameter")
+									.addAttribute("constraint", ((AttributeModel) child).getCons())
+									.addAttribute("datascope", ((AttributeModel) child).getKind())
+									.addAttribute("datatype", ((AttributeModel) child).getType())
+									.addAttribute("name", ((AttributeModel) child).getName());
+						} else if (child instanceof OperationModel) {
+							System.out.println("OperationModel的变量暂时不做处理...");
+							System.out.println(((OperationModel) child).getName());
+							System.out.println(((OperationModel) child).getType());
+							System.out.println(((OperationModel) child).getParams());
+						}
+					}
+				}
+				OutputFormat format = new OutputFormat("\t", true, "UTF-8");
+				XMLWriter writer;
+				// writer = new XMLWriter(System.out, format);
+				writer = new XMLWriter(new FileOutputStream(path), format);
+				writer.write(document);
+				writer.close();
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		}
+
+	}
 }

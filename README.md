@@ -209,6 +209,4 @@ See details [here](http://osdn.jp/projects/amateras/wiki/AmaterasERD_1_0_2) abou
 - Add sequence diagram editor.
 - Add Note for class diagram editor
 
-### 2005/12/31 - AmaterasUML 1.0.0
 
-- This is the initial public release.

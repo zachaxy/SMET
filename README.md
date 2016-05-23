@@ -1,7 +1,8 @@
 # Amateras Modeler
 
 Lightweight UML and ER-diagram editor for Eclipse. Former AmaterasUML and AmaterasERD.
-
+- state machine 
+  - generate EIA and test case
 - UML
   - Class diagram graphical editing
   - Sequence diagram graphical editing
@@ -22,6 +23,8 @@ License
 [Eclipse Public License 1.0](http://opensource.org/licenses/eclipse-1.0.php)
 
 History
+### 2016/5/23 - change to state machine, and generate eia and test case
+
 --------
 ### 2012/7/16 - AmaterasUML 1.3.4
 

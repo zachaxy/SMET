@@ -35,6 +35,7 @@ public class AutoLayoutAction extends AbstractUMLEditorAction {
 	 * @param viewer the graphical viewer
 	 */
 	public AutoLayoutAction(GraphicalViewer viewer) {
+		
 		super(UMLPlugin.getDefault().getResourceString("menu.autoLayout"), viewer);
 	}
 

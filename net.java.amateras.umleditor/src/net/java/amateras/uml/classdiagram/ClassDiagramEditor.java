@@ -8,7 +8,7 @@ import net.java.amateras.uml.classdiagram.action.AddTransCondAction;
 import net.java.amateras.uml.classdiagram.action.AddUpdateAction;
 import net.java.amateras.uml.classdiagram.action.AutoLayoutAction;
 import net.java.amateras.uml.classdiagram.action.CopyAction;
-
+import net.java.amateras.uml.classdiagram.action.GenerateTestCaseAction;
 import net.java.amateras.uml.classdiagram.action.PasteAction;
 import net.java.amateras.uml.classdiagram.action.ShowAllAction;
 import net.java.amateras.uml.classdiagram.action.ShowPublicAction;
@@ -54,6 +54,7 @@ public class ClassDiagramEditor extends DiagramEditor {
 	private AbstractUMLEditorAction addAttributeAction = null;
 	AbstractUMLEditorAction addTransCondAction = null;
 	AbstractUMLEditorAction addUpdateAction = null;
+	GenerateTestCaseAction generateTestCaseAction;
 	private CopyAction copyAction = null;
 	private AutoLayoutAction autoLayoutAction = null;
 	
@@ -143,7 +144,7 @@ public class ClassDiagramEditor extends DiagramEditor {
 		addTransCondAction = new AddTransCondAction(viewer.getEditDomain().getCommandStack(), viewer);
 		addUpdateAction = new AddUpdateAction(viewer.getEditDomain().getCommandStack(), viewer);
 		autoLayoutAction = new AutoLayoutAction(viewer);
-		
+		generateTestCaseAction = new GenerateTestCaseAction(viewer,this);
 		showPublicAction = new ShowPublicAction(viewer);
 		showAllAction = new ShowAllAction(viewer);
 		
@@ -157,6 +158,7 @@ public class ClassDiagramEditor extends DiagramEditor {
 		// TODO use ContextMenuProvider.
 		manager.add(new Separator("align"));
 		manager.add(autoLayoutAction);
+		manager.add(generateTestCaseAction);
 		top = new AlignmentAction((IWorkbenchPart) this, PositionConstants.TOP);
 		top.setSelectionProvider(getGraphicalViewer());
 		midlle = new AlignmentAction((IWorkbenchPart) this, PositionConstants.MIDDLE);
@@ -205,7 +207,7 @@ public class ClassDiagramEditor extends DiagramEditor {
 		addAttributeAction.update((IStructuredSelection) selection);
 		addTransCondAction.update((IStructuredSelection) selection);
 		addUpdateAction.update((IStructuredSelection) selection);
-		
+		generateTestCaseAction.update((IStructuredSelection) selection);
 //		copyAction.update((IStructuredSelection) selection);
 //		pasteAction.update((IStructuredSelection) selection);
 		autoLayoutAction.update((IStructuredSelection) selection);

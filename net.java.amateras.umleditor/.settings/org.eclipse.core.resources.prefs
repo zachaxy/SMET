@@ -1,7 +1,9 @@
 eclipse.preferences.version=1
 encoding//src/net/java/amateras/uml/classdiagram/action/AddAttributeAction.java=UTF-8
 encoding//src/net/java/amateras/uml/classdiagram/action/AddTransCondAction.java=UTF-8
+encoding//src/net/java/amateras/uml/classdiagram/action/AddUpdateAction.java=UTF-8
 encoding//src/net/java/amateras/uml/classdiagram/action/ConnTransCondDialog.java=UTF-8
+encoding//src/net/java/amateras/uml/classdiagram/action/ConnUpdateDialog.java=UTF-8
 encoding//src/net/java/amateras/uml/classdiagram/action/StateProperDialog.java=UTF-8
 encoding//src/net/java/amateras/uml/classdiagram/model/AttributeModel.java=UTF-8
 encoding//src/net/java/amateras/uml/classdiagram/model/ClassModel.java=UTF-8

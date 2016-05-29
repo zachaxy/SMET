@@ -47,11 +47,8 @@ public class GeneralizationModel extends AbstractUMLConnectionModel {
 			return getTransCond();
 			//return new Boolean(isAbstract());
 		}else if(id.equals(P_UPDATE)){
-			String s = "";
-			Iterator<String> iter = updates.iterator();
-			while(iter.hasNext())
-				s = s+iter.next()+"; ";
-			return s;
+			
+			return buildUpdates();
 		}
 		return super.getPropertyValue(id);
 	}
@@ -65,19 +62,36 @@ public class GeneralizationModel extends AbstractUMLConnectionModel {
 
 		return super.isPropertySet(id);
 	}
-
+	public void parseUpdate(String s)
+	{
+		
+		String[] ups = s.split(";");
+		updates = new ArrayList<String>();
+		for(int i = 0; i < ups.length; i++){
+			if(ups[i].trim().length()>0)
+				updates.add(ups[i].trim());
+			
+		}
+	}
+	public List<String> getUpdates(){
+		return updates;
+	}
+	public void setUpdates(List<String> u){
+		this.updates = u;
+	}
+	public String buildUpdates(){
+		String s = "";
+		Iterator<String> iter = updates.iterator();
+		while(iter.hasNext())
+			s = s+iter.next()+"; ";
+		return s;
+	}
 	public void setPropertyValue(Object id, Object value) {
 		if (id.equals(P_TRANS_COND)) {
 			setTransCond((String)value);
 		}else if(id.equals(P_UPDATE)){
 			String s = (String)value;
-			String[] ups = s.split(";");
-			updates = new ArrayList();
-			for(int i = 0; i < ups.length; i++){
-				if(ups[i].trim().length()>0)
-					updates.add(ups[i].trim());
-				
-			}
+			parseUpdate(s);
 				
 			
 		}

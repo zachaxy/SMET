@@ -5,6 +5,7 @@ import net.java.amateras.uml.UMLPlugin;
 import net.java.amateras.uml.action.AbstractUMLEditorAction;
 import net.java.amateras.uml.classdiagram.action.AddAttributeAction;
 import net.java.amateras.uml.classdiagram.action.AddTransCondAction;
+import net.java.amateras.uml.classdiagram.action.AddUpdateAction;
 import net.java.amateras.uml.classdiagram.action.AutoLayoutAction;
 import net.java.amateras.uml.classdiagram.action.CopyAction;
 
@@ -52,6 +53,7 @@ public class ClassDiagramEditor extends DiagramEditor {
 	
 	private AbstractUMLEditorAction addAttributeAction = null;
 	AbstractUMLEditorAction addTransCondAction = null;
+	AbstractUMLEditorAction addUpdateAction = null;
 	private CopyAction copyAction = null;
 	private AutoLayoutAction autoLayoutAction = null;
 	
@@ -139,6 +141,7 @@ public class ClassDiagramEditor extends DiagramEditor {
 	protected void createDiagramAction(GraphicalViewer viewer) {
 		addAttributeAction = new AddAttributeAction(viewer.getEditDomain().getCommandStack(), viewer);
 		addTransCondAction = new AddTransCondAction(viewer.getEditDomain().getCommandStack(), viewer);
+		addUpdateAction = new AddUpdateAction(viewer.getEditDomain().getCommandStack(), viewer);
 		autoLayoutAction = new AutoLayoutAction(viewer);
 		
 		showPublicAction = new ShowPublicAction(viewer);
@@ -191,6 +194,7 @@ public class ClassDiagramEditor extends DiagramEditor {
 		manager.add(new Separator("add"));
 		manager.add(addAttributeAction);
 		manager.add(addTransCondAction);
+		manager.add(addUpdateAction);
 		
 //		manager.add(new Separator("copy"));
 //		manager.add(copyAction);
@@ -200,6 +204,8 @@ public class ClassDiagramEditor extends DiagramEditor {
 	protected void updateDiagramAction(ISelection selection) {
 		addAttributeAction.update((IStructuredSelection) selection);
 		addTransCondAction.update((IStructuredSelection) selection);
+		addUpdateAction.update((IStructuredSelection) selection);
+		
 //		copyAction.update((IStructuredSelection) selection);
 //		pasteAction.update((IStructuredSelection) selection);
 		autoLayoutAction.update((IStructuredSelection) selection);

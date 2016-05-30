@@ -5,6 +5,11 @@ import net.java.amateras.uml.classdiagram.property.EnumPropertyDescriptor;
 import net.java.amateras.uml.model.AbstractUMLModel;
 import net.java.amateras.uml.properties.BooleanPropertyDescriptor;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
@@ -143,6 +148,15 @@ public class AttributeModel extends AbstractUMLModel implements Cloneable {
 
 	public void setPropertyValue(Object id, Object value) {
 		if(id.equals(P_NAME)){
+			if(!validateInput((String)value))
+			{
+				
+				MessageDialog.openError(Display.getCurrent().getActiveShell(),
+										"变量名格式错误",
+										"变量名不合法！\n变量名不能为空且是以字母或者下划线开头的并且只包含数字、字母、下划线的字符串！"
+										);
+				return;
+			}
 			setName((String)value);
 		} else if(id.equals(P_TYPE)){
 			if((Integer)value == 0)
@@ -191,5 +205,62 @@ public class AttributeModel extends AbstractUMLModel implements Cloneable {
 		newModel.setCons(getCons());
 		return newModel;
 	}
-	
+	public boolean validateInput(String str)
+	{
+		if(str.length() == 0)
+		{
+			return false;
+		}
+		else
+		{
+			Pattern pattern = Pattern.compile("[a-zA-Z_][a-zA-Z_0-9]*");
+			Matcher matcher = pattern.matcher(str);
+			boolean b= matcher.matches();
+			if(!b)
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+	public boolean validInt(String str)
+	{
+		if(str.length() == 0)
+		{
+			return true;
+		}
+		else
+		{
+			Pattern pattern = Pattern.compile("[\\[\\(] *[0-9]+ *, *[0-9]+ *[\\]\\)]");
+			Matcher matcher = pattern.matcher(str);
+			boolean b= matcher.matches();
+			if(!b)
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+	public boolean validDouble(String str)
+	{
+		if(str.length() == 0)
+		{
+			return true;
+		}
+		else
+		{
+			Pattern pattern = Pattern.compile("\\[ *[0-9]+(.[0-9]+)? *, *[0-9]+(.[0-9]+)? *\\]");
+			Matcher matcher = pattern.matcher(str);
+			boolean b= matcher.matches();
+			if(!b)
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+	public boolean validChar(String str)
+	{
+		return true;
+	}
 }

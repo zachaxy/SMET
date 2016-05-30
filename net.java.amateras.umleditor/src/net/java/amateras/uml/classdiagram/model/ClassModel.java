@@ -1,6 +1,8 @@
 package net.java.amateras.uml.classdiagram.model;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import net.java.amateras.uml.UMLPlugin;
 import net.java.amateras.uml.model.AbstractUMLModel;
@@ -114,4 +116,5 @@ public class ClassModel extends CommonEntityModel {
 		return newModel;
 	}
 
+	
 }

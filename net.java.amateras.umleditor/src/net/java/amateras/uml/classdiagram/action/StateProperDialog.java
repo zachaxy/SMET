@@ -39,21 +39,10 @@ public class StateProperDialog extends org.eclipse.jface.dialogs.Dialog{
 
 	private boolean validateInput()
 	{
-		if(textVar.getText().length() == 0)
+		if(!var.validateInput(textVar.getText()))
 		{
-			MessageDialog.openError(s, "变量名错误", "变量名不能为空！");
+			MessageDialog.openError(s, "变量名错误", "变量名不合法！\n变量名不能为空且是以字母或者下划线开头的并且只包含数字、字母、下划线的字符串！");
 			return false;
-		}
-		else
-		{
-			Pattern pattern = Pattern.compile("[a-zA-Z_][a-zA-Z_0-9]*");
-			Matcher matcher = pattern.matcher(textVar.getText());
-			boolean b= matcher.matches();
-			if(!b)
-			{
-				MessageDialog.openError(s, "变量名错误", "变量名不合法！\n变量名是以字母或者下划线开头的并且只包含数字、字母、下划线的字符串！");
-				return false;
-			}
 		}
 		return true;
 	}
@@ -89,7 +78,22 @@ public class StateProperDialog extends org.eclipse.jface.dialogs.Dialog{
 		return super.createDialogArea(parent);
 	}
 
-
+	private boolean validateCons()
+	{
+		boolean b = false;
+		if(varType.getText().equals("Int"))
+			b = var.validInt(textCons.getText());
+		else if(varType.getText().equals("Double"))
+			b =  var.validDouble(textCons.getText());
+		else if(varType.getText().equals("Char"))
+			b = var.validChar(textCons.getText());
+		if(!b)
+		{
+			MessageDialog.openError(s, "约束条件有误", "约束条件不合法！\n请输入对应类型的约束！");
+			return false;
+		}
+		return b;
+	}
 	@Override
 	protected void buttonPressed(int buttonId) {
 		// TODO Auto-generated method stub
@@ -97,6 +101,8 @@ public class StateProperDialog extends org.eclipse.jface.dialogs.Dialog{
 		if(buttonId==IDialogConstants.OK_ID)
 		{
 			if(!validateInput())
+				return;
+			if(!validateCons())
 				return;
 			var.setName(textVar.getText());
 			var.setType(varType.getText());

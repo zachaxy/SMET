@@ -52,12 +52,22 @@ public class ConnTransCondDialog extends org.eclipse.jface.dialogs.Dialog{
 	}
 
 
+	public boolean validTrans(){
+		if(!var.validTrans(textVar.getText())){
+			MessageDialog.openError(s, "转移条件有误", "转移条件语法不合法！");
+			return false;
+		}
+		else
+			return true;
+	}
 	@Override
 	protected void buttonPressed(int buttonId) {
 		// TODO Auto-generated method stub
 		
 		if(buttonId==IDialogConstants.OK_ID)
 		{
+			if(!validTrans())
+				return;
 			var.setTransCond(textVar.getText());
 			status = 1;
 		}

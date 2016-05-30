@@ -3,6 +3,8 @@ package net.java.amateras.uml.classdiagram.model;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import net.java.amateras.uml.UMLPlugin;
 import net.java.amateras.uml.model.AbstractUMLEntityModel;
@@ -11,6 +13,8 @@ import net.java.amateras.uml.model.ICloneableModel;
 import net.java.amateras.uml.model.TypeEntityModel;
 
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.views.properties.ColorPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
@@ -24,7 +28,7 @@ import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 public class CommonEntityModel extends AbstractUMLEntityModel implements TypeEntityModel, StereoTypeModel, ICloneableModel {
 
 	protected IPropertyDescriptor[] propertyDescriptors;
-
+	private static String lastErrName;
 	/**
 	 * Default constructor
 	 */
@@ -171,6 +175,18 @@ public class CommonEntityModel extends AbstractUMLEntityModel implements TypeEnt
 		if (id.equals(StereoTypeModel.P_STEREO_TYPE)) {
 			setStereoType((String) value);
 		} else if (id.equals(P_ENTITY_NAME)) {
+			if(!validateInput((String)value))
+			{
+	
+				if(lastErrName == null || !lastErrName.equals((String)value))
+					MessageDialog.openError(Display.getCurrent().getActiveShell(),
+										"变量名格式错误",
+										"变量名不合法！\n变量名不能为空且是以字母或者下划线开头的并且只包含数字、字母、下划线的字符串！"
+										);
+					
+				lastErrName = (String)value;
+				return;
+			}
 			setName((String) value);
 		}
 		super.setPropertyValue(id, value);
@@ -199,4 +215,22 @@ public class CommonEntityModel extends AbstractUMLEntityModel implements TypeEnt
 
 	}
 
+	public boolean validateInput(String str)
+	{
+		if(str.length() == 0)
+		{
+			return false;
+		}
+		else
+		{
+			Pattern pattern = Pattern.compile("[a-zA-Z_][a-zA-Z_0-9]*");
+			Matcher matcher = pattern.matcher(str);
+			boolean b= matcher.matches();
+			if(!b)
+			{
+				return false;
+			}
+		}
+		return true;
+	}
 }

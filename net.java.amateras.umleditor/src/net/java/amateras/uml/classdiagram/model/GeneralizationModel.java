@@ -9,10 +9,10 @@ import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
 import net.java.amateras.uml.UMLPlugin;
 import net.java.amateras.uml.model.AbstractUMLConnectionModel;
-//import parsii.eval.Expression;
-//import parsii.eval.Parser;
-//import parsii.eval.Scope;
-//import parsii.tokenizer.ParseException;
+import parsii.eval.Expression;
+import parsii.eval.Parser;
+import parsii.eval.Scope;
+import parsii.tokenizer.ParseException;
 
 public class GeneralizationModel extends AbstractUMLConnectionModel {
 
@@ -105,15 +105,15 @@ public class GeneralizationModel extends AbstractUMLConnectionModel {
 	
 	public boolean validTrans(String str)
 	{
-//		Scope scope = Scope.create();
-//		try {
-//			Expression parsiiExpr = Parser.parse(str);
-//		
-//			return true;
-//		} catch (ParseException e) {
-//			// TODO Auto-generated catch block
-//			//e.printStackTrace();
-//		}
+		Scope scope = Scope.create();
+		try {
+			Expression parsiiExpr = Parser.parse(str);
+			System.out.println("OK, trans ok:"+str);
+			return true;
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		}
 		return false;
 	}
 }

@@ -36,3 +36,5 @@ Import-Package: com.thoughtworks.xstream,
  net.java.amateras.xstream,
  org.dom4j,
  org.dom4j.io
+Bundle-ClassPath: lib/parsii-1.5.jar,
+ .

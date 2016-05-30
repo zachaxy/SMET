@@ -66,6 +66,7 @@ public class AddTransCondAction extends AbstractTypeAction {
 			}
 			else
 			{
+			
 				target.setTransCond(oldTransCond);
 			}
 			//attr.setName("var" + count);

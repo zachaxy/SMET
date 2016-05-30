@@ -41,7 +41,7 @@ public class GenerateTestCaseAction extends AbstractUMLEditorAction {
 	 * @param viewer the graphical viewer
 	 */
 	public GenerateTestCaseAction(GraphicalViewer viewer,ClassDiagramEditor editor) {
-		super("Éú³É²âÊÔÓÃÀı", viewer);
+		super("ç”Ÿæˆæµ‹è¯•ç”¨ä¾‹", viewer);
 		this.editor = editor;
 	}
 

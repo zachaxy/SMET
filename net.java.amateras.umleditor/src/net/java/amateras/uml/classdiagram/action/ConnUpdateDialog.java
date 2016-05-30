@@ -249,7 +249,13 @@ public class ConnUpdateDialog extends org.eclipse.jface.dialogs.Dialog {
 				String value;
 				InputDialog inputDialog = new InputDialog(comp.getShell(), "添加动作", "新动作", "", null);
 				if (inputDialog.open() == InputDialog.OK) {
+					
 					value = inputDialog.getValue();
+					if(!var.validTrans(value))
+					{
+						MessageDialog.openError(s, "转移动作有误", "转移动作语法不合法！");
+						return;
+					}
 					var.getUpdates().add(value);
 				}
 
@@ -271,6 +277,11 @@ public class ConnUpdateDialog extends org.eclipse.jface.dialogs.Dialog {
 				InputDialog inputDialog = new InputDialog(comp.getShell(), "修改", "动作:", language, null);
 				if (inputDialog.open() == InputDialog.OK) {
 					value = inputDialog.getValue();
+					if(!var.validTrans(value))
+					{
+						MessageDialog.openError(s, "转移动作有误", "转移动作语法不合法！");
+						return;
+					}
 					int i = var.getUpdates().indexOf(language);
 					var.getUpdates().set(i, value);
 				}

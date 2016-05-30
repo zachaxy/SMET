@@ -2,6 +2,8 @@ package net.java.amateras.uml.classdiagram.model;
 
 import java.util.*;
 
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.views.properties.ColorPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
@@ -73,6 +75,11 @@ public class GeneralizationModel extends AbstractUMLConnectionModel {
 		updates = new ArrayList<String>();
 		for(int i = 0; i < ups.length; i++){
 			if(ups[i].trim().length()>0)
+				if(!validAction(ups[i].trim()))
+				{
+					MessageDialog.openError(Display.getCurrent().getActiveShell(), "转移动作有误", "转移动作语法不合法！");
+					return;
+				}
 				updates.add(ups[i].trim());
 			
 		}
@@ -92,9 +99,15 @@ public class GeneralizationModel extends AbstractUMLConnectionModel {
 	}
 	public void setPropertyValue(Object id, Object value) {
 		if (id.equals(P_TRANS_COND)) {
+			if(!validTrans((String)value))
+			{
+				MessageDialog.openError(Display.getCurrent().getActiveShell(), "转移条件有误", "转移条件语法不合法！");
+				return;
+			}
 			setTransCond((String)value);
 		}else if(id.equals(P_UPDATE)){
 			String s = (String)value;
+			
 			parseUpdate(s);
 				
 			
@@ -103,12 +116,29 @@ public class GeneralizationModel extends AbstractUMLConnectionModel {
 		super.setPropertyValue(id, value);
 	}
 	
+	public boolean validAction(String str)
+	{
+		Scope scope = Scope.create();
+		try {
+			Expression parsiiExpr = Parser.parse(str);
+			System.out.println("OK, trans ok:"+str);
+			if(!(str.indexOf('=')>0))
+				return false;
+			return true;
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		}
+		return false;
+	}
+	
 	public boolean validTrans(String str)
 	{
 		Scope scope = Scope.create();
 		try {
 			Expression parsiiExpr = Parser.parse(str);
 			System.out.println("OK, trans ok:"+str);
+		
 			return true;
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block

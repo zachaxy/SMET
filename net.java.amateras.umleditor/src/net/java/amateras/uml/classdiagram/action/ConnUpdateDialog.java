@@ -251,7 +251,7 @@ public class ConnUpdateDialog extends org.eclipse.jface.dialogs.Dialog {
 				if (inputDialog.open() == InputDialog.OK) {
 					
 					value = inputDialog.getValue();
-					if(!var.validTrans(value))
+					if(!var.validAction(value))
 					{
 						MessageDialog.openError(s, "转移动作有误", "转移动作语法不合法！");
 						return;

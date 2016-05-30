@@ -39,8 +39,8 @@ public class AttributeEditPart extends AbstractUMLEditPart {
 	protected void createEditPolicies() {
 		installEditPolicy(EditPolicy.COMPONENT_ROLE,
 				new AttributeComponentEditPolicy());
-		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE,
-				new AttributeDirectEditPolicy());
+		//installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE,
+			//	new AttributeDirectEditPolicy());
 	}
 
 	public void propertyChange(PropertyChangeEvent arg0) {
@@ -65,7 +65,7 @@ public class AttributeEditPart extends AbstractUMLEditPart {
 		label.setUnderline(model.isStatic());
 	}
 
-	/** ƒAƒgƒŠƒrƒ…[ƒg‚ÌƒGƒfƒBƒbƒgƒ|ƒŠƒV[ */
+	/** ï¿½Aï¿½gï¿½ï¿½ï¿½rï¿½ï¿½ï¿½[ï¿½gï¿½ÌƒGï¿½fï¿½Bï¿½bï¿½gï¿½|ï¿½ï¿½ï¿½Vï¿½[ */
 	private class AttributeComponentEditPolicy extends ComponentEditPolicy {
 		protected Command createDeleteCommand(GroupRequest deleteRequest) {
 			DeleteCommand command = new DeleteCommand();
@@ -75,7 +75,7 @@ public class AttributeEditPart extends AbstractUMLEditPart {
 		}
 	}
 
-	/** íœƒRƒ}ƒ“ƒh */
+	/** ï¿½íœï¿½Rï¿½}ï¿½ï¿½ï¿½h */
 	private class DeleteCommand extends Command {
 
 		private AbstractUMLEntityModel parent;

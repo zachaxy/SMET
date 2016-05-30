@@ -217,7 +217,7 @@ public class CommonEntityModel extends AbstractUMLEntityModel implements TypeEnt
 
 	public boolean validateInput(String str)
 	{
-		if(str.length() == 0)
+		if(str== null || str.length() == 0)
 		{
 			return false;
 		}

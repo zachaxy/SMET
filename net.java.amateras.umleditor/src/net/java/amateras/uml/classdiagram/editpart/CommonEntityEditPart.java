@@ -21,8 +21,10 @@ import org.eclipse.gef.editpolicies.DirectEditPolicy;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.CellEditorLocator;
 import org.eclipse.gef.tools.DirectEditManager;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
 
 import java.beans.PropertyChangeEvent;
@@ -118,6 +120,7 @@ public abstract class CommonEntityEditPart extends AbstractUMLEntityEditPart {
 			CommonEntityModel model = (CommonEntityModel) getModel();
 			oldName = showSimpleName() ? model.getSimpleName() : model.getName();
 			if (showSimpleName()) {
+				
 				model.setSimpleName(newName);
 			} else {
 				model.setName(newName);
@@ -125,6 +128,16 @@ public abstract class CommonEntityEditPart extends AbstractUMLEntityEditPart {
 		}
 
 		public void setName(String name) {
+			CommonEntityModel model = (CommonEntityModel) getModel();
+			if(!model.validateInput(name))
+			{
+				MessageDialog.openError(Display.getCurrent().getActiveShell(),
+						"变量名格式错误",
+						"变量名不合法！\n变量名不能为空且是以字母或者下划线开头的并且只包含数字、字母、下划线的字符串！"
+						);
+				newName = model.getName();
+				return;
+			}
 			newName = name;
 		}
 

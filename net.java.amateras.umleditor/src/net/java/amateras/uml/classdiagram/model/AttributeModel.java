@@ -167,7 +167,14 @@ public class AttributeModel extends AbstractUMLModel implements Cloneable {
 				setType(VAR_TYPE_CHAR);
 			else 
 				setType("错误");
+			if(!validateCons(this.getType(), this.getCons()))
+				this.setCons("");
 		}else if(id.equals(P_CONS)){
+			if(!validateCons(this.getType(),(String)value)){
+				MessageDialog.openError(Display.getCurrent().getActiveShell(),
+						"约束条件有误", "约束条件语法不合法！");
+				return ;
+			}
 			setCons((String)value);
 		}else if(id.equals(P_KIND)){
 		
@@ -231,7 +238,7 @@ public class AttributeModel extends AbstractUMLModel implements Cloneable {
 		}
 		else
 		{
-			Pattern pattern = Pattern.compile("[\\[\\(] *[0-9]+ *, *[0-9]+ *[\\]\\)]");
+			Pattern pattern = Pattern.compile("[\\[\\(] *-?[0-9]+ *, *-?[0-9]+ *[\\]\\)]");
 			Matcher matcher = pattern.matcher(str);
 			boolean b= matcher.matches();
 			if(!b)
@@ -249,7 +256,7 @@ public class AttributeModel extends AbstractUMLModel implements Cloneable {
 		}
 		else
 		{
-			Pattern pattern = Pattern.compile("\\[ *[0-9]+(.[0-9]+)? *, *[0-9]+(.[0-9]+)? *\\]");
+			Pattern pattern = Pattern.compile("[\\[\\(] *-?[0-9]+(.[0-9]+)? *, *-?[0-9]+(.[0-9]+)? *[\\]\\)]");
 			Matcher matcher = pattern.matcher(str);
 			boolean b= matcher.matches();
 			if(!b)
@@ -263,4 +270,18 @@ public class AttributeModel extends AbstractUMLModel implements Cloneable {
 	{
 		return true;
 	}
+	
+	public boolean validateCons(String type, String cons)
+	{
+		boolean b = false;
+		if(type.equals("Int"))
+			b = validInt(cons);
+		else if(type.equals("Double"))
+			b =  validDouble(cons);
+		else if(type.equals("Char"))
+			b = validChar(cons);
+		
+		return b;
+	}
+	
 }

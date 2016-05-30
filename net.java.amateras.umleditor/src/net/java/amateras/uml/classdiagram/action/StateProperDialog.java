@@ -78,22 +78,7 @@ public class StateProperDialog extends org.eclipse.jface.dialogs.Dialog{
 		return super.createDialogArea(parent);
 	}
 
-	private boolean validateCons()
-	{
-		boolean b = false;
-		if(varType.getText().equals("Int"))
-			b = var.validInt(textCons.getText());
-		else if(varType.getText().equals("Double"))
-			b =  var.validDouble(textCons.getText());
-		else if(varType.getText().equals("Char"))
-			b = var.validChar(textCons.getText());
-		if(!b)
-		{
-			MessageDialog.openError(s, "约束条件有误", "约束条件不合法！\n请输入对应类型的约束！");
-			return false;
-		}
-		return b;
-	}
+
 	@Override
 	protected void buttonPressed(int buttonId) {
 		// TODO Auto-generated method stub
@@ -102,8 +87,11 @@ public class StateProperDialog extends org.eclipse.jface.dialogs.Dialog{
 		{
 			if(!validateInput())
 				return;
-			if(!validateCons())
+			if(!var.validateCons(varType.getText(), textCons.getText()))
+			{
+				MessageDialog.openError(s, "约束条件有误", "约束条件不合法！\n请输入对应类型的约束！");
 				return;
+			}
 			var.setName(textVar.getText());
 			var.setType(varType.getText());
 			var.setCons(textCons.getText());

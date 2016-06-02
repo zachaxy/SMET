@@ -10,7 +10,9 @@ import net.java.amateras.uml.editpart.RootEditPart;
 import net.java.amateras.uml.model.AbstractUMLConnectionModel;
 import net.java.amateras.uml.model.AbstractUMLEntityModel;
 import net.java.amateras.uml.model.RootModel;
+import net.java.amateras.uml.testcase.tcg.TCG;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.draw2d.graph.DirectedGraph;
 import org.eclipse.draw2d.graph.DirectedGraphLayout;
@@ -23,6 +25,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.internal.Workbench;
 
 /**
@@ -50,6 +53,16 @@ public class GenerateTestCaseAction extends AbstractUMLEditorAction {
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	public void run() {
 		System.out.println(editor.getEditorInput().getName());
+		IFile file = ((IFileEditorInput) editor.getEditorInput()).getFile();
+		//System.out.println(file.getLocation().toOSString());
+		String path = file.getLocation().toOSString();
+		if(path.endsWith(".cld")){
+			path = path.substring(0, path.length()-3)+"eia";
+			System.out.println("eia path is-->"+path);
+			new TCG().generate(path);
+		}else{
+			System.out.println("unsupport type of "+file.getFileExtension());
+		}
 	}	
 
 	@Override

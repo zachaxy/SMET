@@ -11,6 +11,7 @@ import net.java.amateras.uml.editpart.AbstractUMLConnectionEditPart;
 import net.java.amateras.uml.editpart.AbstractUMLEntityEditPart;
 import net.java.amateras.uml.model.AbstractUMLEntityModel;
 import net.java.amateras.uml.model.AbstractUMLModel;
+import util.ShowFile;
 
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.Command;
@@ -41,6 +42,7 @@ public class AddAttributeAction extends AbstractTypeAction {
 		}
 		
 		public void execute(){
+
 			attr = new AttributeModel();
 			int count = 1;
 			List<AbstractUMLModel> list = target.getChildren();

@@ -37,4 +37,6 @@ Import-Package: com.thoughtworks.xstream,
  org.dom4j,
  org.dom4j.io
 Bundle-ClassPath: lib/parsii-1.5.jar,
- .
+ .,
+ lib/choco-1_2_04.jar,
+ lib/choco-solver-2.1.5.jar

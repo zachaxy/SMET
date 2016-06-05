@@ -25,8 +25,8 @@ public class Parser {
 	public Automaton parseXML() {
 		Automaton automaton = new Automaton();
         try {
-            String path = "E:\\JavaSrc\\XML\\Testeia.txt";
-            File inputFile = new File(path);
+            //String path = "E:\\JavaSrc\\XML\\Testeia.txt";
+            File inputFile = new File(fileName);
             SAXReader reader = new SAXReader();
             org.dom4j.Document document = reader.read(inputFile);
 

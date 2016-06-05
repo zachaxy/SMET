@@ -2,12 +2,15 @@ package util;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
+
 
 public class ShowFile {
 	static public void open(String fName) {
@@ -49,10 +52,19 @@ public class ShowFile {
 	 */
 	static private IFile getFile(String fileName) {
 		IProject prj = getActiveProject();
+		
 		if (prj == null) {
 			return null;
 		}
-		return prj.getFile("/src/" + fileName);
+		
+		try {
+			prj.refreshLocal(IResource.DEPTH_INFINITE, null);
+		} catch (CoreException e) {
+			System.out.println("无法刷新");
+			e.printStackTrace();
+			
+		}
+		return prj.getFile(fileName);
 	}
 	/**
 	 * 获取当前文件相关的项目对象
@@ -70,4 +82,5 @@ public class ShowFile {
 		}
 		return null;
 	}
+	
 }

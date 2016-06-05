@@ -27,6 +27,7 @@ import net.java.amateras.uml.model.AbstractUMLConnectionModel;
 import net.java.amateras.uml.model.AbstractUMLEntityModel;
 import net.java.amateras.uml.model.AbstractUMLModel;
 import net.java.amateras.uml.model.RootModel;
+import util.ShowFile;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -102,7 +103,7 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 /**
- * GEF‚ğg—p‚µ‚½ƒGƒfƒBƒ^B
+ * GEFï¿½ï¿½ï¿½gï¿½pï¿½ï¿½ï¿½ï¿½ï¿½Gï¿½fï¿½Bï¿½^ï¿½B
  *
  * @author Takahiro Shida.
  */
@@ -222,7 +223,7 @@ public abstract class DiagramEditor extends GraphicalEditorWithPalette
 	}
 
 	/**
-	 * ˆÈ‘O‚Ìƒo[ƒWƒ‡ƒ“‚Åì¬‚³‚ê‚½ƒtƒ@ƒCƒ‹‚ğ©“®C³‚·‚é. -v2.0 eqŠÖŒW‚Ì’Ç‰Á
+	 * ï¿½È‘Oï¿½Ìƒoï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½Åì¬ï¿½ï¿½ï¿½ê‚½ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½. -v2.0 ï¿½eï¿½qï¿½ÖŒWï¿½Ì’Ç‰ï¿½
 	 */
 	private void validateModel(AbstractUMLEntityModel parent) {
 		List<AbstractUMLModel> children = parent.getChildren();
@@ -238,21 +239,21 @@ public abstract class DiagramEditor extends GraphicalEditorWithPalette
 	}
 
 	/**
-	 * ƒ[ƒh‚É¸”s‚µ‚½ê‡‚Ì‰Šúƒ‚ƒfƒ‹‚ğ•Ô‹p‚·‚é.
+	 * ï¿½ï¿½ï¿½[ï¿½hï¿½Éï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½fï¿½ï¿½ï¿½ï¿½Ô‹pï¿½ï¿½ï¿½ï¿½.
 	 * 
 	 * @return
 	 */
 	protected abstract RootModel createInitializeModel();
 
 	/**
-	 * ƒGƒfƒBƒ^‚Ìƒ^ƒCƒv‚ğ•Ô‹p‚·‚é. (ex class)
+	 * ï¿½Gï¿½fï¿½Bï¿½^ï¿½Ìƒ^ï¿½Cï¿½vï¿½ï¿½Ô‹pï¿½ï¿½ï¿½ï¿½. (ex class)
 	 * 
 	 * @return
 	 */
 	protected abstract String getDiagramType();
 
 	/**
-	 * Diagramƒ‚ƒfƒ‹‚ğ•Ô‹p‚·‚é.
+	 * Diagramï¿½ï¿½ï¿½fï¿½ï¿½ï¿½ï¿½Ô‹pï¿½ï¿½ï¿½ï¿½.
 	 * 
 	 * @return
 	 */
@@ -306,27 +307,27 @@ public abstract class DiagramEditor extends GraphicalEditorWithPalette
 		ScalableRootEditPart rootEditPart = new ScalableRootEditPart();
 		viewer.setRootEditPart(rootEditPart);
 
-		// ZoomManager‚Ìæ“¾
+		// ZoomManagerï¿½Ìæ“¾
 		ZoomManager manager = rootEditPart.getZoomManager();
 
-		// ƒY[ƒ€ƒŒƒxƒ‹‚Ìİ’è
+		// ï¿½Yï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½Ìİ’ï¿½
 		double[] zoomLevels = new double[] { 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 2.5, 3.0, 4.0, 5.0, 10.0, 20.0 };
 		manager.setZoomLevels(zoomLevels);
 
-		// ƒY[ƒ€ ƒŒƒxƒ‹ ƒRƒ“ƒgƒŠƒrƒ…[ƒVƒ‡ƒ“‚Ìİ’è
+		// ï¿½Yï¿½[ï¿½ï¿½ ï¿½ï¿½ï¿½xï¿½ï¿½ ï¿½Rï¿½ï¿½ï¿½gï¿½ï¿½ï¿½rï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Ìİ’ï¿½
 		ArrayList<String> zoomContributions = new ArrayList<String>();
 		zoomContributions.add(ZoomManager.FIT_ALL);
 		zoomContributions.add(ZoomManager.FIT_HEIGHT);
 		zoomContributions.add(ZoomManager.FIT_WIDTH);
 		manager.setZoomLevelContributions(zoomContributions);
-		// Šg‘åƒAƒNƒVƒ‡ƒ“‚Ìì¬‚Æ“o˜^
+		// ï¿½gï¿½ï¿½Aï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Ìì¬ï¿½Æ“oï¿½^
 		getActionRegistry().registerAction(new ZoomInAction(manager));
-		// k¬ƒAƒNƒVƒ‡ƒ“‚Ìì¬‚Æ“o˜^
+		// ï¿½kï¿½ï¿½ï¿½Aï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Ìì¬ï¿½Æ“oï¿½^
 		getActionRegistry().registerAction(new ZoomOutAction(manager));
 
 		getGraphicalViewer().setKeyHandler(new GraphicalViewerKeyHandler(getGraphicalViewer()));
 
-		// ƒRƒ“ƒeƒNƒXƒgƒƒjƒ…[‚Ìì¬
+		// ï¿½Rï¿½ï¿½ï¿½eï¿½Nï¿½Xï¿½gï¿½ï¿½ï¿½jï¿½ï¿½ï¿½[ï¿½Ìì¬
 		String menuId = this.getClass().getName() + ".EditorContext";
 
 		MenuManager menuMgr = new MenuManager(menuId, menuId);
@@ -388,14 +389,14 @@ public abstract class DiagramEditor extends GraphicalEditorWithPalette
 	}
 
 	/**
-	 * ƒ^ƒCƒv‚É“Á‰»‚µ‚½ƒAƒNƒVƒ‡ƒ“‚ğì‚é.
+	 * ï¿½^ï¿½Cï¿½vï¿½É“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
 	 * 
 	 * @param viewer
 	 */
 	protected abstract void createDiagramAction(GraphicalViewer viewer);
 
 	/**
-	 * ƒAƒNƒVƒ‡ƒ“‚ğƒRƒ“ƒeƒLƒXƒgƒƒjƒ…[‚Éİ’è‚·‚é.
+	 * ï¿½Aï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½ï¿½ï¿½eï¿½Lï¿½Xï¿½gï¿½ï¿½ï¿½jï¿½ï¿½ï¿½[ï¿½Éİ’è‚·ï¿½ï¿½.
 	 * 
 	 * @param manager
 	 */
@@ -417,11 +418,11 @@ public abstract class DiagramEditor extends GraphicalEditorWithPalette
 						// System.out.println("file
 						// name:"+file.getName()+"\nfile
 						// path:"+file.getFullPath().toOSString());
-						// System.out.println("Êµ¼ÊµÄÂ·¾¶:"+file.getLocation().toOSString());
+						// System.out.println("Êµï¿½Êµï¿½Â·ï¿½ï¿½:"+file.getLocation().toOSString());
 
 				// RootModel rootModel =
 				// (RootModel)getGraphicalViewer().getContents().getModel();
-				// listÖĞmodelµÄË³ĞòÊÇ°´ÕÕÌîÈëeditorÊ±µÄË³ĞòÀ´µÄ.
+				// listï¿½ï¿½modelï¿½ï¿½Ë³ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½editorÊ±ï¿½ï¿½Ë³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
 				/*List<GeneralizationEditPart> tList = ((ClassEditPart) viewer.getContents().getChildren().get(0))
 						.getSourceConnections();
 
@@ -430,8 +431,10 @@ public abstract class DiagramEditor extends GraphicalEditorWithPalette
 				GeneralizationModel gm1 = (GeneralizationModel) (tList.get(1).getModel());
 				System.out.println(gm1.getTransCond());*/
 
-				// TODO:Ìí¼ÓĞ´ÈëEIAµÄ¹¦ÄÜ
-				saveAsEIA(file.getLocation().toOSString());
+				// TODO:ï¿½ï¿½ï¿½Ğ´ï¿½ï¿½EIAï¿½Ä¹ï¿½ï¿½ï¿½
+				//saveAsEIA(file.getLocation().toOSString());
+				saveAsEIA(file);
+				
 			}
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
@@ -475,14 +478,14 @@ public abstract class DiagramEditor extends GraphicalEditorWithPalette
 	}
 
 	/**
-	 * ƒGƒ“ƒeƒBƒeƒB—p‚ÌPaletteEntry‚ğì¬‚µ‚Ü‚·B
+	 * ï¿½Gï¿½ï¿½ï¿½eï¿½Bï¿½eï¿½Bï¿½pï¿½ï¿½PaletteEntryï¿½ï¿½ï¿½ì¬ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
 	 *
 	 * @param itemName
-	 *            ƒpƒŒƒbƒg‚É•\¦‚·‚éƒAƒCƒeƒ€–¼
+	 *            ï¿½pï¿½ï¿½ï¿½bï¿½gï¿½É•\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½Cï¿½eï¿½ï¿½ï¿½ï¿½
 	 * @param clazz
-	 *            ƒ‚ƒfƒ‹‚ÌƒNƒ‰ƒX
+	 *            ï¿½ï¿½ï¿½fï¿½ï¿½ï¿½ÌƒNï¿½ï¿½ï¿½X
 	 * @param icon
-	 *            ƒpƒŒƒbƒg‚É•\¦‚·‚éƒAƒCƒRƒ“‚ÌƒpƒX
+	 *            ï¿½pï¿½ï¿½ï¿½bï¿½gï¿½É•\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½Cï¿½Rï¿½ï¿½ï¿½Ìƒpï¿½X
 	 * @return PaletteEntry
 	 */
 	protected PaletteEntry createEntityEntry(String itemName, Class<?> clazz, String icon) {
@@ -492,14 +495,14 @@ public abstract class DiagramEditor extends GraphicalEditorWithPalette
 	}
 
 	/**
-	 * ƒRƒlƒNƒVƒ‡ƒ“—p‚ÌPaletteEntry‚ğì¬‚µ‚Ü‚·B
+	 * ï¿½Rï¿½lï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½pï¿½ï¿½PaletteEntryï¿½ï¿½ï¿½ì¬ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
 	 *
 	 * @param itemName
-	 *            ƒpƒŒƒbƒg‚É•\¦‚·‚éƒAƒCƒeƒ€–¼
+	 *            ï¿½pï¿½ï¿½ï¿½bï¿½gï¿½É•\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½Cï¿½eï¿½ï¿½ï¿½ï¿½
 	 * @param clazz
-	 *            ƒ‚ƒfƒ‹‚ÌƒNƒ‰ƒX
+	 *            ï¿½ï¿½ï¿½fï¿½ï¿½ï¿½ÌƒNï¿½ï¿½ï¿½X
 	 * @param icon
-	 *            ƒpƒŒƒbƒg‚É•\¦‚·‚éƒAƒCƒRƒ“‚ÌƒpƒX
+	 *            ï¿½pï¿½ï¿½ï¿½bï¿½gï¿½É•\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½Cï¿½Rï¿½ï¿½ï¿½Ìƒpï¿½X
 	 * @return PaletteEntry
 	 */
 	protected PaletteEntry createConnectionEntry(String itemName, Class<?> clazz, String icon) {
@@ -532,7 +535,7 @@ public abstract class DiagramEditor extends GraphicalEditorWithPalette
 	}
 
 	/**
-	 * ƒAƒNƒVƒ‡ƒ“‚ğXV‚·‚é.
+	 * ï¿½Aï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½Vï¿½ï¿½ï¿½ï¿½.
 	 * 
 	 * @param selection
 	 */
@@ -556,7 +559,7 @@ public abstract class DiagramEditor extends GraphicalEditorWithPalette
 	}
 
 	/**
-	 * UMLƒGƒfƒBƒ^‚ÌƒAƒEƒgƒ‰ƒCƒ“ƒy[ƒWB ƒ_ƒCƒAƒOƒ‰ƒ€‚ÌƒTƒ€ƒlƒCƒ‹‚ğ•\¦‚µ‚Ü‚·B
+	 * UMLï¿½Gï¿½fï¿½Bï¿½^ï¿½ÌƒAï¿½Eï¿½gï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½yï¿½[ï¿½Wï¿½B ï¿½_ï¿½Cï¿½Aï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ÌƒTï¿½ï¿½ï¿½lï¿½Cï¿½ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
 	 */
 	private class UMLContentOutlinePage implements IContentOutlinePage {
 
@@ -568,13 +571,13 @@ public abstract class DiagramEditor extends GraphicalEditorWithPalette
 			this.canvas = new Canvas(parent, SWT.BORDER);
 			LightweightSystem lws = new LightweightSystem(canvas);
 
-			// RootEditPart‚Ìƒrƒ…[‚ğƒ\[ƒX‚Æ‚µ‚ÄƒTƒ€ƒlƒCƒ‹‚ğì¬
+			// RootEditPartï¿½Ìƒrï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½\ï¿½[ï¿½Xï¿½Æ‚ï¿½ï¿½ÄƒTï¿½ï¿½ï¿½lï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ì¬
 			ScalableRootEditPart rootEditPart = (ScalableRootEditPart) getGraphicalViewer().getRootEditPart();
 			this.thumbnail = new ScrollableThumbnail((Viewport) rootEditPart.getFigure());
 			this.thumbnail.setSource(rootEditPart.getLayer(LayerConstants.PRINTABLE_LAYERS));
 			lws.setContents(thumbnail);
 
-			// ƒCƒ[ƒW‚ğ”jŠü‚·‚é‚½‚ß‚ÌƒŠƒXƒi
+			// ï¿½Cï¿½ï¿½ï¿½[ï¿½Wï¿½ï¿½jï¿½ï¿½ï¿½ï¿½ï¿½é‚½ï¿½ß‚Ìƒï¿½ï¿½Xï¿½i
 			disposeListener = new DisposeListener() {
 				public void widgetDisposed(DisposeEvent e) {
 					if (thumbnail != null) {
@@ -584,7 +587,7 @@ public abstract class DiagramEditor extends GraphicalEditorWithPalette
 				}
 			};
 
-			// ƒOƒ‰ƒtƒBƒJƒ‹Eƒrƒ…[ƒ‚ª”jŠü‚³‚ê‚é‚Æ‚«‚ÉƒTƒ€ƒlƒCƒ‹‚à”jŠü‚·‚é
+			// ï¿½Oï¿½ï¿½ï¿½tï¿½Bï¿½Jï¿½ï¿½ï¿½Eï¿½rï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½jï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ÉƒTï¿½ï¿½ï¿½lï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½jï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			getGraphicalViewer().getControl().addDisposeListener(disposeListener);
 		}
 
@@ -624,13 +627,14 @@ public abstract class DiagramEditor extends GraphicalEditorWithPalette
 		}
 	}
 
-	private void saveAsEIA(String path) {
+	private void saveAsEIA(IFile f) {
+		String path = f.getLocation().toOSString();
 		if (path.endsWith(".cld")) {
 			path = path.substring(0, path.length() - 3) + "eia";
 			System.out.println(path);
 			File file = new File(path);
 			if (file.exists()) {
-				System.out.println("Ô­Ê¼EIAÒÑ´æÔÚĞèÒªÉ¾³ıµô");
+				System.out.println("åŸå§‹EIAå­˜åœ¨,å°†è¢«åˆ é™¤");
 				if (!file.delete()) {
 					System.err.println();
 				}
@@ -683,7 +687,7 @@ public abstract class DiagramEditor extends GraphicalEditorWithPalette
 									.addAttribute("datatype", ((AttributeModel) child).getType())
 									.addAttribute("name", ((AttributeModel) child).getName());
 						} else if (child instanceof OperationModel) {
-							System.out.println("OperationModelµÄ±äÁ¿ÔİÊ±²»×ö´¦Àí...");
+							System.out.println("OperationModel...");
 							System.out.println(((OperationModel) child).getName());
 							System.out.println(((OperationModel) child).getType());
 							System.out.println(((OperationModel) child).getParams());
@@ -703,6 +707,11 @@ public abstract class DiagramEditor extends GraphicalEditorWithPalette
 			}
 
 		}
-
+		/*String s = "E:/runtime-EclipseApplication/abc/hehe.txt";
+		ShowFile.open(s);*/
+		//IFile ff = new IFile();
+		String openPath = f.getName().replace(".cld", ".eia");
+		System.out.println("å½“å‰çš„EIAçš„pathæ˜¯"+openPath);
+		ShowFile.open(openPath);
 	}
 }

@@ -24,14 +24,14 @@ public class VarR {
 
 
         //TODO:添加String类型的判断.
-        if (t.equals("double")) {
+        if (t.equals("Double")) {
             type = VarRType.DOUBLE;
             variable = Choco.makeRealVar(n, -21474836.0, 21474836.0);
 
-        } else if (t.equals("boolean")) {
+        } else if (t.equals("Boolean")) {
             type = VarRType.BOOLEAN;
             variable = Choco.makeBooleanVar(n);
-        } else if (t.equals("int")) {
+        } else if (t.equals("Int")) {
             type = VarRType.INT;
             //[警告] choco.Choco (checkIntVarBounds) WARNING! Domains over [-21474836, 21474836] are strongly inadvisable !
             variable = Choco.makeIntVar(n, -21474836, 21474836);

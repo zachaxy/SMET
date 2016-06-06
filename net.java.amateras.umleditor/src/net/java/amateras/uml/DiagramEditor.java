@@ -666,7 +666,9 @@ public abstract class DiagramEditor extends GraphicalEditorWithPalette
 					for (int k = 0; k < outLine.size(); k++) {
 						/*GeneralizationModel gm0 = (GeneralizationModel) (tList.get(0).getModel());
 						System.out.println(gm0.getTransCond());*/
-						Element transitionElement = stateElement.addElement("transition").addAttribute("cond",((GeneralizationModel)outLine.get(k).getModel()).getTransCond())
+						Element transitionElement = stateElement.addElement("transition")
+								.addAttribute("cond",((GeneralizationModel)outLine.get(k).getModel()).getTransCond())
+								.addAttribute("acttion", ((GeneralizationModel)outLine.get(k).getModel()).getUpdate())
 								.addAttribute("target",((ClassModel)outLine.get(k).getTarget().getModel()).getName());
 						/*System.out.println("******\n"+((ClassModel)outLine.get(k).getSource().getModel()).getName());
 						System.out.println(((ClassModel)outLine.get(k).getTarget().getModel()).getName()+"\n******");*/
@@ -707,9 +709,6 @@ public abstract class DiagramEditor extends GraphicalEditorWithPalette
 			}
 
 		}
-		/*String s = "E:/runtime-EclipseApplication/abc/hehe.txt";
-		ShowFile.open(s);*/
-		//IFile ff = new IFile();
 		String openPath = f.getName().replace(".cld", ".eia");
 		System.out.println("当前的EIA的path是"+openPath);
 		ShowFile.open(openPath);

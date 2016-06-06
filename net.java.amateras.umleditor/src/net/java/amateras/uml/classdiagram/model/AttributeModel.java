@@ -25,9 +25,9 @@ public class AttributeModel extends AbstractUMLModel implements Cloneable {
 	private String type = "int";
 	private String cons = "";
 	private String kind = "";
-	public static final String VAR_INPUT = "输入变量";
-	public static final String VAR_MID = "中间变量";
-	public static final String VAR_OUTPUT = "输出变量";
+	public static final String VAR_INPUT = "input";
+	public static final String VAR_MID = "local";
+	public static final String VAR_OUTPUT = "output";
 	public static final String[] KIND_ARR = new String[] { VAR_INPUT, VAR_MID, VAR_OUTPUT };
 	public static final String VAR_TYPE_INT = "Int";
 	public static final String VAR_TYPE_DOUBLE = "Double";

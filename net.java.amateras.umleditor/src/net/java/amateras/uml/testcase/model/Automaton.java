@@ -13,7 +13,7 @@ import java.util.Vector;
 public class Automaton {
     private HashMap<String, State> states;
     private ArrayList<Transition> trans;
-    private HashMap<String, Variable> vars;
+    private HashMap<String, VarR> vars;
     private State initState;
 
     public Automaton() {
@@ -55,15 +55,15 @@ public class Automaton {
     }
 
     public void addVariable(String name, String type, String domain, boolean isInput) {
-        Variable v = new Variable(name, type, domain, isInput);
+        VarR v = new VarR(name, type, domain, isInput);
         vars.put(name, v);
     }
 
-    public Variable getVariable(String name) {
+    public VarR  getVariable(String name) {
         return vars.get(name);
     }
 
-    public HashMap<String, Variable> getVariables() {
+    public HashMap<String, VarR > getVariables() {
         return vars;
     }
 
@@ -75,7 +75,7 @@ public class Automaton {
         System.out.println("-----------INIT  STATES-----------");
         System.out.println(initState.getName());
         System.out.println("---------------VARS---------------");
-        for (Variable v : vars.values()) {
+        for (VarR  v : vars.values()) {
             System.out.println(v.getName());
             System.out.println("\t" + v.getDomain());
         }
@@ -98,7 +98,7 @@ public class Automaton {
             pw.println("-----------INIT  STATES-----------");
             pw.println(initState.getName());
             pw.println("---------------VARS---------------");
-            for (Variable v : vars.values()) {
+            for (VarR  v : vars.values()) {
                 pw.println(v.getName());
                 pw.println("\t" + v.getDomain());
             }

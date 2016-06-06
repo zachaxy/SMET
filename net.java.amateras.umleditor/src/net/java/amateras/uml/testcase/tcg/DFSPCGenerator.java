@@ -7,7 +7,7 @@ import java.util.Stack;
 import net.java.amateras.uml.testcase.model.Automaton;
 import net.java.amateras.uml.testcase.model.State;
 import net.java.amateras.uml.testcase.model.Transition;
-import net.java.amateras.uml.testcase.model.Variable;
+import net.java.amateras.uml.testcase.model.VarR;
 
  
 
@@ -68,7 +68,7 @@ public class DFSPCGenerator extends Generator {
 			return null;
 		}
 		TestCase tc = new TestCase(ap);
-		for (Variable v : automaton.getVariables().values()) {
+		for (VarR v : automaton.getVariables().values()) {
 			if (v.isInput()) {
 				tc.addInputData(v.getName(), result.get(v.getName()));
 			}

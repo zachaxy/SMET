@@ -4,12 +4,9 @@ import java.util.*;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.views.properties.ColorPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
-import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
-import net.java.amateras.uml.UMLPlugin;
 import net.java.amateras.uml.model.AbstractUMLConnectionModel;
 import parsii.eval.Expression;
 import parsii.eval.Parser;
@@ -20,6 +17,7 @@ public class GeneralizationModel extends AbstractUMLConnectionModel {
 
 	private String transCond="";
 	private List<String> updates = new ArrayList<String>();
+	private String update = "";
 	public static final String P_TRANS_COND = "_transform_condition";
 	public static final String P_UPDATE = "_UPDATE";
 	public GeneralizationModel(){
@@ -95,8 +93,25 @@ public class GeneralizationModel extends AbstractUMLConnectionModel {
 		Iterator<String> iter = updates.iterator();
 		while(iter.hasNext())
 			s = s+iter.next()+"; ";
-		return s;
+		//return s;
+		update= s;
+		return update;
 	}
+	
+	public String getUpdate(){
+		StringBuilder sb = new StringBuilder();
+		for(String s:updates){
+			sb.append(s);
+			sb.append(";");
+		}
+		System.out.println("update--->"+sb.toString());
+		return sb.toString();
+	}
+	
+	public void setUpdate(String s){
+		update = s;
+	}
+	
 	public void setPropertyValue(Object id, Object value) {
 		if (id.equals(P_TRANS_COND)) {
 			if(!validTrans((String)value))
@@ -106,11 +121,10 @@ public class GeneralizationModel extends AbstractUMLConnectionModel {
 			}
 			setTransCond((String)value);
 		}else if(id.equals(P_UPDATE)){
-			String s = (String)value;
-			
-			parseUpdate(s);
-				
-			
+			//TODO:这里只需返回一个字符串即可
+			update = (String)value;
+			System.out.println("-------------------->"+update);
+			parseUpdate((String)value);
 		}
 	
 		super.setPropertyValue(id, value);
@@ -126,7 +140,6 @@ public class GeneralizationModel extends AbstractUMLConnectionModel {
 				return false;
 			return true;
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			//e.printStackTrace();
 		}
 		return false;
@@ -141,7 +154,6 @@ public class GeneralizationModel extends AbstractUMLConnectionModel {
 		
 			return true;
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			//e.printStackTrace();
 		}
 		return false;

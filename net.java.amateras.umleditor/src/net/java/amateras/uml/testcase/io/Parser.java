@@ -13,6 +13,7 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 import net.java.amateras.uml.testcase.model.Automaton;
+import net.java.amateras.uml.testcase.util.Utility;
 
 public class Parser {
 	
@@ -41,11 +42,12 @@ public class Parser {
             System.out.println("----------------------------");
             System.out.println("参数的个数"+param.size());
 
+            //(1)这一步是将参数添加variable变量中.并且初始化好了参数的各个状态.
             for (Element node : param) {
                 String domain = node.attribute(0).getText();
                 String name = node.attribute(3).getText();
                 String type = node.attribute(2).getText();
-                boolean isInput = node.attribute(1).getText().equals("输入变量");
+                boolean isInput = node.attribute(1).getText().equals("input");
                 automaton.addVariable(name, type, domain, isInput);
                 System.out.println(name+":"+type+":"+domain+":"+isInput);
 
@@ -54,13 +56,16 @@ public class Parser {
             List<Element> states = root.elements("state");
             System.out.println("状态数："+states.size());
             String initialName = root.attribute("initial").getText();
+//这还不能直接设置初始状态,因为其他状态还没有设置,设置初始的时候get不到值.
 
-
+            //(2)这一步是添加所有的状态,只是初始化了状态map占位符(name),没有具体设置状态的迁移等条件.
             for (Element e:states){
                 String source = e.attribute(0).getText();
                 automaton.addState(source);
             }
 
+
+            //(3)这一步是添加状态的迁移条件和动作.
             for (Element e:states){
                 String source = e.attribute(0).getText();
 
@@ -69,12 +74,18 @@ public class Parser {
                     String cond = "(true)";
                     if(tran.attribute(0).getText()!=""){
                         cond = tran.attribute(0).getText();
+                        //将cond转为前缀式.
                         cond = regular(cond);
                     }
                     Vector<String> updates = new Vector();
-                    String action = tran.attribute(1).getText();
-                    String[] as = action.split("=");
+                    //TODO:处理多个update,以;分割,每个update以=分割.左值是单一变量,右值是表达式,需转为前缀式.
+                    String action = tran.attribute(1).getText().replaceAll("\\s","");
+                    String[] as = action.split("(=)|(;)");
                     for (int i = 0; i < as.length; i++) {
+                        as[i] = "("+as[i]+")";
+                        if(i%2==1){
+                            as[i] = Utility.expRegular(as[i]);
+                        }
                         updates.add(as[i]);
                     }
 
@@ -92,7 +103,8 @@ public class Parser {
 
 		return automaton;
 	}
-	
+
+    //将中缀式转为前缀式.
 	private String regular(String s) {
 		boolean found = false;
 		Matcher m = Pattern.compile("(&&)|(\\|\\|)").matcher(s);
